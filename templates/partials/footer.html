@@ -1,0 +1,53 @@
+{% load i18n %}
+{% load staticfiles %}
+
+<footer id="tsb-ftr">
+    {% block footer %}
+            <div id="tsb-ground-top-layer">
+                <div id="tsb-ftr-content">
+                    <div class="tsb-row">
+                        <div class="tsb-col tsb-col--25">
+                            <h2 class="tsb-ftr-title">Onze winkel</h2>
+                            <ul class="tsb-ftr-nav">
+                                <li><a class="tsb-ftr-nav-item" href="{% static '../wat-doen-we/' %}">Wat doen we?</a></li>
+                                <li><a class="tsb-ftr-nav-item" href="#">Presentaties</a></li>
+                                <li><a class="tsb-ftr-nav-item" href="{% static '../bezoek-onze-winkel/' %}">Bezoek onze winkel</a></li>
+                            </ul>
+                        </div>
+                        <div class="tsb-col tsb-col--25">
+                            <h2 class="tsb-ftr-title">Online bestellen</h2>
+                            <ul class="tsb-ftr-nav">
+                                <li><a class="tsb-ftr-nav-item" href="{% url 'catalogue:index' %}">Producten</a></li>
+                                <li><a class="tsb-ftr-nav-item" href="{% url 'basket:summary' %}">Mijn winkelmandje</a></li>
+                                {% if user.is_authenticated %}
+                                    <li><a class="tsb-ftr-nav-item" href="{% url 'customer:summary' %}">Mijn profiel</a></li>
+                                {% else %}
+                                    <li><a class="tsb-ftr-nav-item" href="{% url 'customer:login' %}">Mijn profiel</a></li>
+                                {% endif %}
+                                <li><a class="tsb-ftr-nav-item" href="{% static '../verkoopsvoorwaarden/' %}">Verkoopsvoorwaarden</a></li>
+                            </ul>
+                        </div>
+                        <div class="tsb-col tsb-col--25">
+                            <h2 class="tsb-ftr-title">Contacteer ons</h2>
+                            <ul class="tsb-ftr-contact">
+                                <li class="tsb-ftr-contact tsb-ftr-contact--addr">Tiensesteenweg 95<br/>3360 Korbeek-Lo</li>
+                                <li class="tsb-ftr-contact tsb-ftr-contact--phone">016/46 19 93</li>
+                                <li class="tsb-ftr-contact tsb-ftr-contact--mail"><a href="mailto:info@tsuikerboontje.be">info@tsuikerboontje.be</a></li>
+                            </ul>
+                        </div>
+                        <div class="tsb-col tsb-col--25">
+                            <ul class="tsb-ftr-nav">
+                                <h2 class="tsb-ftr-title">&copy; Copyright</h2>
+                                <li class="tsb-ftr-nav-item--no-link">'t Suikerboontje</li>
+                                <li class="tsb-ftr-nav-item--no-link">Alle rechten voorbehouden</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="tsb-ground-middle-layer">&nbsp;</div>
+            <div id="tsb-bird-layer">&nbsp;</div>
+            <div id="tsb-rainbow-layer">&nbsp;</div>
+            <div id="tsb-ground-sky-layer">&nbsp;</div>
+    {% endblock %}
+</footer>
