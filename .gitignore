@@ -54,7 +54,7 @@ coverage.xml
 # settings.py # Mag blijven, want zal worden overschreven door settings_deployment.py
 project.db
 *.sqlite3
-settings.py
+
 
 
 # Sphinx documentation
