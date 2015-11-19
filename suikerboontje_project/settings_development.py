@@ -8,7 +8,7 @@ FORCE_SCRIPT_NAME = ''
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'claestim_suikerboon',
+        'NAME': 'claestim_suikerboontje',
         #'NAME': 'claestim_suikerboon_v01',
         'USER': 'claestim',
         'PASSWORD': 'LjC7XZgqGtx2',
