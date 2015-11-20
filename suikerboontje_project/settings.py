@@ -39,6 +39,7 @@ from oscar import get_core_apps
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
+'''
 STATIC_URL = '/static/'
 
 SETTINGS_PATH = os.path.dirname(__file__)
@@ -53,7 +54,32 @@ PROJECT_ROOT = os.path.join(SETTINGS_PATH, os.pardir)
 
 STATICFILES_DIRS = [
     os.path.join(SETTINGS_PATH, "static"),
-]
+]'''
+
+SETTINGS_PATH = os.path.dirname(__file__)
+
+# Absolute path to the directory that holds media.
+# Example: "/home/username/projectname/media/"
+MEDIA_ROOT = os.path.join(SETTINGS_PATH, 'media')
+
+# URL that handles the media served from MEDIA_ROOT. Make sure to use a
+# trailing slash if there is a path component (optional in other cases).
+# Examples: "http://media.lawrence.com", "http://example.com/media/"
+MEDIA_URL = '/media/'
+
+# The absolute path to the directory where collectstatic will collect static files for deployment.
+# Example: "/home/username/projectname/static/"
+STATIC_ROOT = os.path.join(SETTINGS_PATH, 'static')
+
+# URL to use when referring to static files located in STATIC_ROOT.
+# Examples: "/static/", "http://static.example.com/"
+STATIC_URL = '/static/'
+
+# For static assets that arent't tied to a particular app. 
+# In addition to using a static/ directory inside your apps, you can define a list of directories 
+STATICFILES_DIRS = (
+    os.path.join(SETTINGS_PATH, 'common_static'),
+)
 
 
 INSTALLED_APPS = [
@@ -92,11 +118,13 @@ ROOT_URLCONF = 'suikerboontje_project.urls'
 
 from oscar import OSCAR_MAIN_TEMPLATE_DIR
 
+PACKAGE_ROOT = os.path.abspath(os.path.dirname(__file__))
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-            os.path.join(BASE_DIR, 'templates'),
+            os.path.join(PACKAGE_ROOT, 'templates'),
             OSCAR_MAIN_TEMPLATE_DIR
         ],
         'APP_DIRS': True,
