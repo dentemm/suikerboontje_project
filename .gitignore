@@ -52,6 +52,8 @@ coverage.xml
 # Django stuff:
 *.log
 # settings.py # Mag blijven, want zal worden overschreven door settings_deployment.py
+
+settings_deployment.py
 project.db
 *.sqlite3
 

@@ -209,32 +209,32 @@ OSCAR_DASHBOARD_NAVIGATION = [
                 'label': _('Categories'),
                 'url_name': 'dashboard:catalogue-category-list',
             },
-            {
-                'label': _('Ranges'),
-                'url_name': 'dashboard:range-list',
-            },
-            {
-                'label': _('Low stock alerts'),
-                'url_name': 'dashboard:stock-alert-list',
-            },
+#            {
+#                'label': _('Ranges'),
+#                'url_name': 'dashboard:range-list',
+#            },
+#            {
+#                'label': _('Low stock alerts'),
+#                'url_name': 'dashboard:stock-alert-list',
+#            },
         ]
     },
-    {
-        'label': _('Fulfilment'),
-        'icon': 'icon-shopping-cart',
-        'children': [
-            {
-                'label': _('Orders'),
-                'url_name': 'dashboard:order-list',
-            },
-            {
-                'label': _('Statistics'),
-                'url_name': 'dashboard:order-stats',
-            },
-            {
-                'label': _('Partners'),
-                'url_name': 'dashboard:partner-list',
-            },
+#    {
+#        'label': _('Fulfilment'),
+#        'icon': 'icon-shopping-cart',
+#        'children': [
+#            {
+#                'label': _('Orders'),
+#                'url_name': 'dashboard:order-list',
+#            },
+#            {
+#                'label': _('Statistics'),
+#                'url_name': 'dashboard:order-stats',
+#            },
+#            {
+#                'label': _('Partners'),
+#                'url_name': 'dashboard:partner-list',
+#            },
             # The shipping method dashboard is disabled by default as it might
             # be confusing. Weight-based shipping methods aren't hooked into
             # the shipping repository by default (as it would make
@@ -243,8 +243,8 @@ OSCAR_DASHBOARD_NAVIGATION = [
             #     'label': _('Shipping charges'),
             #     'url_name': 'dashboard:shipping-method-list',
             # },
-        ]
-    },
+#        ]
+#    },
     {
         'label': _('Customers'),
         'icon': 'icon-group',
@@ -259,20 +259,20 @@ OSCAR_DASHBOARD_NAVIGATION = [
             },
         ]
     },
-    {
-        'label': _('Offers'),
-        'icon': 'icon-bullhorn',
-        'children': [
-            {
-                'label': _('Offers'),
-                'url_name': 'dashboard:offer-list',
-            },
-            {
-                'label': _('Vouchers'),
-                'url_name': 'dashboard:voucher-list',
-            },
-        ],
-    },
+#    {
+#        'label': _('Offers'),
+#        'icon': 'icon-bullhorn',
+#        'children': [
+#            {
+#                'label': _('Offers'),
+#                'url_name': 'dashboard:offer-list',
+#            },
+#            {
+#                'label': _('Vouchers'),
+#                'url_name': 'dashboard:voucher-list',
+#            },
+#        ],
+#    },
     {
         'label': _('Content'),
         'icon': 'icon-folder-close',
@@ -299,11 +299,11 @@ OSCAR_DASHBOARD_NAVIGATION = [
             },
         ]
     },
-    {
-        'label': _('Reports'),
-        'icon': 'icon-bar-chart',
-        'url_name': 'dashboard:reports-index',
-    },
+#    {
+#        'label': _('Reports'),
+#        'icon': 'icon-bar-chart',
+#        'url_name': 'dashboard:reports-index',
+#    },
 ]
 
 
