@@ -116,9 +116,17 @@ class Gateway(object):
 		self._paymentMeanBrand = paymentMeanBrand
 		self._paymentMeanType = paymentMeanType
 
-	def _fetch_response(self, json_request):	# execute request
+	def _fetch_response(self, json_request):
+		'''
+		execute request
+		'''
+
+		print 'gateway: _fetch_response'
 
 		message, key = self._calculate_seal()
+
+		print 'message: ' + message
+		print 'secret_key: ' + key
 
 		connection = httplib.HTTPSConnection(self._host, 443, timeout=20)
 		headers = {'Content-type': 'application/json', 'Accept': ''}
@@ -137,6 +145,8 @@ class Gateway(object):
 		Maak de nodige json string aan voor de betaling interface
 		'''
 
+		print '====== gateway: _build_json_request'
+
 		amount = kwargs.get('amount', '')
 		automaticResponseUrl = kwargs.get('automaticResponseUrl', '')
 
@@ -153,6 +163,8 @@ class Gateway(object):
 
 	def _calculate_seal(self):
 
+		print '====== gateway: _calculate_seal'
+
 		amount = '1000'
 		automaticResponseUrl = 'https://responseurl.com'
 		currencyCode = '978'
@@ -162,12 +174,18 @@ class Gateway(object):
 		merchantId = '002001000000001'
 		normalReturnUrl = 'https://responseurl2.com'
 		orderChannel = 'INTERNET'
+		paymentMeanBrand = 'BCMC'
+		paymentMeanType = 'CARD'
 		transactionReference = '1232015021717313'
 
 
 		secret_key = bytes('002001000000001_KEY1').encode('utf-8')
 
-		string_concat = str(amount + automaticResponseUrl + currencyCode + interfaceVersion + normalReturnUrl + orderChannel + paymentMeanBrandList)
+		print 'secret_key: ' + secret_key
+
+		string_concat = str(amount + automaticResponseUrl + currencyCode + interfaceVersion + normalReturnUrl + merchantId + orderChannel + paymentMeanBrand + paymentMeanType)
+
+		print 'string_concat: ' + string_concat
 
 		#utf_string_concat = unicode(s, "utf-8")
 
@@ -212,5 +230,5 @@ class Gateway(object):
 
 		#return self._setup_request(AUTH, **kwargs)
 
-		return self._fetch_response
+		self._fetch_response(None)
 
