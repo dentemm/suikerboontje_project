@@ -14,6 +14,8 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 import os
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+location = lambda x: os.path.join(os.path.dirname(os.path.realpath(__file__)), x)
+
 
 from oscar.defaults import *
 
@@ -94,7 +96,8 @@ INSTALLED_APPS = [
     
     'compressor',
     'widget_tweaks',
-] + get_core_apps()
+
+] + get_core_apps(['myapps.checkout'])
 
 
 SITE_ID = 1
@@ -124,7 +127,9 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-            os.path.join(PACKAGE_ROOT, 'templates'),
+            location('templates'),
+            #os.path.join(BASE_DIR, 'templates'),
+            #os.path.join(OSCAR_MAIN_TEMPLATE_DIR, 'templates'),
             OSCAR_MAIN_TEMPLATE_DIR
         ],
         'APP_DIRS': True,
@@ -144,6 +149,12 @@ TEMPLATES = [
         },
     },
 ]
+
+TEMPLATE_LOADERS = (
+    'django.template.loaders.filesystem.Loader',
+    'django.template.loaders.app_directories.Loader',
+    #'django.template.loaders.eggs.Loader',
+)
 
 AUTHENTICATION_BACKENDS = (
     'oscar.apps.customer.auth_backends.EmailBackend',
