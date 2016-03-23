@@ -3,6 +3,7 @@
 import httplib
 import hmac 
 import hashlib
+import base64
 
 
 '''
@@ -17,7 +18,8 @@ bron: http://www.jokecamp.com/blog/examples-of-creating-base64-hashes-using-hmac
 from oscar.apps.payment.exceptions import GatewayError
 
 
-SIPS_HOST = 'https://payment-webinit.simu.sips-atos.com/rs-services/v2/paymentInit/'
+#SIPS_HOST = 'https://payment-webinit.simu.sips-atos.com/rs-services/v2/paymentInit/'
+SIPS_HOST = 'https://payment-webinit.simu.sips-atos.com'
 SIPS_PATH = '/rs-services/v2/paymentInit/'
 SIPS_MERCHANT = '002001000000001'
 SIPS_PASSWORD = '002001000000001_KEY1'	# secret key
@@ -123,17 +125,32 @@ class Gateway(object):
 
 		print 'gateway: _fetch_response'
 
-		message, key = self._calculate_seal()
+		#message, key = self._calculate_seal()
+		signature = self._calculate_seal()
 
-		print 'message: ' + message
-		print 'secret_key: ' + key
+		#print 'message: ' + message
+		#print 'secret_key: ' + key
+		print 'signature: ' + signature
 
-		connection = httplib.HTTPSConnection(self._host, 443, timeout=20)
+		connection = httplib.HTTPSConnection(SIPS_HOST, 443, timeout=20)
+
+		print 'connection ok'
+
 		headers = {'Content-type': 'application/json', 'Accept': ''}
-		connection.request('POST', self._path, json_request, headers)
+
+		print 'headers ok'
+
+		connection.request('POST', SIPS_PATH, signature, headers)
+
+		print 'request ok'
 
 		response = connection.getresponse()
+
+		print 'response ok'
+
 		json_response = response.read()
+
+		print 'json response ok'
 
 		print 'response status code: ' + str(response.status)
 		print 'json_response'
@@ -183,13 +200,17 @@ class Gateway(object):
 
 		print 'secret_key: ' + secret_key
 
-		string_concat = str(amount + automaticResponseUrl + currencyCode + interfaceVersion + normalReturnUrl + merchantId + orderChannel + paymentMeanBrand + paymentMeanType)
+		string_concat = bytes(amount + automaticResponseUrl + currencyCode + interfaceVersion + normalReturnUrl + merchantId + orderChannel + paymentMeanBrand + paymentMeanType).encode('utf-8')
 
 		print 'string_concat: ' + string_concat
 
+		signature = base64.b64encode(hmac.new(secret_key, string_concat, digestmod=hashlib.sha256).digest())
+
+		print 'signature: ' + signature
+
 		#utf_string_concat = unicode(s, "utf-8")
 
-		return (string_concat, secret_key)
+		return signature
 
 
 
