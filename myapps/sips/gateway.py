@@ -19,7 +19,7 @@ from oscar.apps.payment.exceptions import GatewayError
 
 
 #SIPS_HOST = 'https://payment-webinit.simu.sips-atos.com/rs-services/v2/paymentInit/'
-SIPS_HOST = 'https://payment-webinit.simu.sips-atos.com'
+SIPS_HOST = 'payment-webinit.simu.sips-atos.com'
 SIPS_PATH = '/rs-services/v2/paymentInit/'
 SIPS_MERCHANT = '002001000000001'
 SIPS_PASSWORD = '002001000000001_KEY1'	# secret key
@@ -153,7 +153,9 @@ class Gateway(object):
 		print 'json response ok'
 
 		print 'response status code: ' + str(response.status)
-		print 'json_response'
+		print 'response: ' + str(json_response)
+
+		print 'done'
 
 
 
