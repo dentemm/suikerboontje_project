@@ -135,7 +135,7 @@ class Gateway(object):
 		print 'gateway: _fetch_response'
 
 		#message, key = self._calculate_seal()
-		signature = self._calculate_seal(test='test')
+		signature = self._calculate_seal(test='test', nog_eentje='een ander', derde='derde', zomer='zomer')
 
 		#print 'message: ' + message
 		#print 'secret_key: ' + key
@@ -198,15 +198,25 @@ class Gateway(object):
 
 	def _calculate_seal(self, **kwargs):
 
-		
+		print '************** gateway: _calculate_seal()'
 
-		print '====== gateway: _calculate_seal'
+		kwargs_string = ''
 
+		# Sorteer de kwargs
 		for key in sorted(kwargs):
-			print 'key: %s -- value: %s' % (key, kwargs[key])
+			#print 'key: %s -- value: %s' % (key, kwargs[key])
+			kwargs_string += kwargs[key]
+
+		print 'kwargs_string: ' + kwargs_string
+
+		message = bytes(kwargs_string).encode('utf-8')
+		secret = bytes(SIPS_PASSWORD).encode('utf-8')
+
+		sig = base64.b64encode(hmac.new(secret, message, digestmod=hashlib.sha256).digest())
+
+		print 'nieuwe: ' + sig
 
 
-		print 'gesorteerd: ' + kwargs['test']
 
 		amount = '1000'
 		automaticResponseUrl = 'https://responseurl.com'
