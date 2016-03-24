@@ -7,6 +7,8 @@ import base64
 import collections
 import json
 
+import requests
+
 
 '''
 message = bytes('field_values').encode('utf-8')
@@ -23,12 +25,12 @@ from oscar.apps.payment.exceptions import GatewayError
 # SIPS JSON PAYPAGE
 SIPS_PAYPAGE_TEST_HOST = 'payment-webinit.simu.sips-atos.com'
 SIPS_PAYPAGE_LIVE_HOST = 'payment-webinit.sips-atos.com'
-SIPS_PAYPAGE_PATH = '/rs-services/v2/paymentInit'
-SIPS_PAYPAGE_URL = 'payment-webinit.simu.sips-atos/rs-services/v2/paymentInit/'
+SIPS_PAYPAGE_PATH = '/rs-services/v2/paymentInit/'
+SIPS_PAYPAGE_URL = 'https://payment-webinit.simu.sips-atos/rs-services/v2/paymentInit/'
 SIPS_PAYPAGE_SECRET_KEY = '002001000000001_KEY1'
 
 
-SIPS_PATH = '/rs-services/v2/paymentInit/'
+SIPS_PATH = '/rs-services/v2/paymentInit'
 SIPS_MERCHANT = '002001000000001'
 SIPS_PASSWORD = '002001000000001_KEY1'	# secret key
 SIPS_KEY_VERSION = '1'
@@ -157,6 +159,7 @@ class Gateway(object):
 		merchantId = '002001000000001'
 		normalReturnUrl = 'http://www.normalreturnurl.com'
 		orderChannel = 'INTERNET'
+		transactionReference = 'mijnRef'
 		#paymentMeanBrandList = ['VISA', 'MASTERCARD']
 
 		request_dict = {
@@ -168,6 +171,7 @@ class Gateway(object):
 			'merchantId': merchantId,
 			'normalReturnUrl': normalReturnUrl,
 			'orderChannel': orderChannel,
+			'transactionReference': transactionReference,
 			#'paymentMeanBrandList': paymentMeanBrandList
 		}
 
@@ -208,7 +212,11 @@ class Gateway(object):
 		#print 'secret_key: ' + key
 		print 'signature: ' + signature
 
-		connection = httplib.HTTPSConnection(SIPS_PAYPAGE_TEST_HOST, 443, timeout=20)
+		r = requests.get('http://www.thinkmobile.be/')
+
+		print 'requests: ' + r.status_code
+
+		connection = httplib.HTTPSConnection(SIPS_PAYPAGE_TEST_HOST)
 		#connection = httplib.HTTPSConnection(SIPS_PAYPAGE_URL, 443, timeout=20)
 
 
@@ -218,7 +226,7 @@ class Gateway(object):
 
 		print 'headers ok'
 
-		connection.request('POST', SIPS_PAYPAGE_TEST_HOST, json_dict, headers)
+		connection.request('POST', '/rs-services/v2/paymentInit/', json_dict, headers)
 		#connection.request('POST', json_dict, headers)
 
 		print 'request ok'

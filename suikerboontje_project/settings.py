@@ -97,6 +97,9 @@ INSTALLED_APPS = [
     'compressor',
     'widget_tweaks',
 
+    # third party
+
+
 ] + get_core_apps(['myapps.checkout'])
 
 
