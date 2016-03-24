@@ -19,19 +19,21 @@ bron: http://www.jokecamp.com/blog/examples-of-creating-base64-hashes-using-hmac
 from oscar.apps.payment.exceptions import GatewayError
 
 
-#SIPS_HOST = 'https://payment-webinit.simu.sips-atos.com/rs-services/v2/paymentInit/'
+# SIPS JSON PAYPAGE
 SIPS_HOST = 'payment-webinit.simu.sips-atos.com'
 SIPS_PATH = '/rs-services/v2/paymentInit/'
 SIPS_MERCHANT = '002001000000001'
 SIPS_PASSWORD = '002001000000001_KEY1'	# secret key
 SIPS_KEY_VERSION = '1'
 SIPS_ORDER_CHANNEL = 'INTERNET'
-SIPS_INTERFACE_VERSION = 'IR_WS_2.9'
+SIPS_INTERFACE_VERSION = 'IR_WS_2.10'
 SIPS_CURRENCY_CODE = '978'
 SIPS_PAYMENT_MEAN_BRAND = 'BCMC'
 SIPS_PAYMENT_MEAN_TYPE = 'CARD'
 
+# SIPS OFFICE JSON 
 SIPS_OFFICE_JSON_HOST = 'office-server.test.sips-atos.com'
+
 SIPS_OFFICE_SECRET_KEY = 'CcDeXSiX2CY0mgbuB_MJxXqXYyJaINZixX2KZgY770o'
 SIPS_OFFICE_JSON_MERCHANTID = '037107704346091'
 SIPS_OFFICE_JSON_KEYVERSION	= '2'
@@ -117,7 +119,7 @@ class SipsResponse(object):
 
 class Gateway(object):
 
-	def __init__(self, sips_url, merchantId='002001000000001', keyVersion='1', orderChannel='INTERNET', interfaceVersion='???', paymentMeanBrand='BCMC', paymentMeanType='CARD'):
+	def __init__(self, sips_url, merchantId='002001000000001', keyVersion='1', orderChannel='INTERNET', interfaceVersion='IR_WS_2.10', paymentMeanBrand='BCMC', paymentMeanType='CARD'):
 		
 		self._sips_url = sips_url
 		self._merchantId = merchantId
@@ -191,12 +193,20 @@ class Gateway(object):
 					orderChannel=orderChannel
 					)
 
+		data_dict = {}
+		json_dict = json.dumps(data_dict)
+
 
 
 
 
 
 	def _calculate_seal(self, **kwargs):
+		'''
+		Deze methode berekent de seal, alle vereiste velden worden als **kwargs parameters aangeboden
+		De return value is een string die als seal geldt
+		SHA encryptie seal: http://www.jokecamp.com/blog/examples-of-creating-base64-hashes-using-hmac-sha256-in-different-languages/#python
+		'''
 
 		print '************** gateway: _calculate_seal()'
 
