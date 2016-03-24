@@ -54,15 +54,10 @@ class Facade(object):
 
 	def pre_authorise(self, order_number, amount, txn_ref='test', billing_address=None, currency='EUR'):
 
-		print '=========== Facade: pre_authorise methode'
+		print '************** Facade: pre_authorise methode'
 
 		self.gateway.pre(
 			amount=amount,
 			currency=currency,
 			merchantId=SIPS_MERCHANT,
 		)
-
-
-
-
-

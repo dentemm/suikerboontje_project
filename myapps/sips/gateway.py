@@ -144,7 +144,50 @@ class Gateway(object):
 		execute request
 		'''
 
-		print 'gateway: _fetch_response'
+		print '************ gateway: _fetch_response()'
+
+		amount = '9876'
+		currencyCode = '978'
+		interfaceVersion = 'IR_WS_2.10'
+		keyVersion = '1'
+		merchantId = '002001000000001'
+		normalReturnUrl = 'http://www.normalreturnurl.com'
+		orderChannel = 'INTERNET'
+		paymentMeanBrandList = ['VISA', 'MASTERCARD']
+
+		response_dict = {
+			'amount': amount,
+			'currencyCode' : currencyCode,
+			'interfaceVersion': interfaceVersion,
+			'keyVersion' : keyVersion,
+			'merchantId': merchantId,
+			'normalReturnUrl': normalReturnUrl,
+			'orderChannel': orderChannel,
+			'paymentMeanBrandList': paymentMeanBrandList
+		}
+
+		concat_string = ''
+
+		for key in sorted(response_dict):
+
+			if key == 'keyVersion':
+
+				print 'negeer!!!!' + key
+				continue
+
+			elif key == 'sealAlgorithm':
+
+				print 'negeer!!!!' + key
+				continue
+
+			else: 
+				print 'key: ' + key
+				concat_string += str(response_dict[key])
+				print concat_string
+
+
+
+		
 
 		#message, key = self._calculate_seal()
 		signature = self._calculate_seal(test='test', nog_eentje='een ander', derde='derde', zomer='zomer')
@@ -301,11 +344,11 @@ class Gateway(object):
 		De pre methode wordt gebruikt om betaling onmiddellijk te innen vooraleer order processing plaats vindt
 		'''
 
-		print '============= gateway methode: pre-auth!'
+		print '********** gateway methode: pre-auth!'
 
-		#self._check_kwargs(kwargs, ['amount', 'currencyCode', 'merchantId'])
+		for key in kwargs:
+			print key + ': ' + str(kwargs[key])
 
-		#return self._setup_request(AUTH, **kwargs)
 
 		self._fetch_response(None)
 
