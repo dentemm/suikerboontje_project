@@ -4,6 +4,7 @@ import httplib
 import hmac 
 import hashlib
 import base64
+import collections
 
 
 '''
@@ -34,6 +35,9 @@ SIPS_OFFICE_JSON_HOST = 'office-server.test.sips-atos.com'
 SIPS_OFFICE_SECRET_KEY = 'CcDeXSiX2CY0mgbuB_MJxXqXYyJaINZixX2KZgY770o'
 SIPS_OFFICE_JSON_MERCHANTID = '037107704346091'
 SIPS_OFFICE_JSON_KEYVERSION	= '2'
+SIPS_OFFICE_JSON_TEST_CARD_1 = '5017670000000000'
+SIPS_EXPIRY_DATE = '201609'
+SIPS_OFFICE_INTERFACE_VERSION = 'IR_WS_2.11'
 
 
 
@@ -131,13 +135,13 @@ class Gateway(object):
 		print 'gateway: _fetch_response'
 
 		#message, key = self._calculate_seal()
-		signature = self._calculate_seal()
+		signature = self._calculate_seal(test='test')
 
 		#print 'message: ' + message
 		#print 'secret_key: ' + key
 		print 'signature: ' + signature
 
-		connection = httplib.HTTPSConnection(SIPS_HOST, 443, timeout=20)
+		connection = httplib.HTTPSConnection(SIPS_OFFICE_JSON_HOST, 443, timeout=20)
 
 		print 'connection ok'
 
@@ -145,7 +149,7 @@ class Gateway(object):
 
 		print 'headers ok'
 
-		connection.request('POST', SIPS_PATH, signature, headers)
+		connection.request('POST', '/rs-services/v2/paymentInit/', signature, headers)
 
 		print 'request ok'
 
@@ -182,12 +186,27 @@ class Gateway(object):
 		orderChannel = 'INTERNET'
 		paymentMeanBrandList = ['VISA', 'MASTERCARD', 'MAESTRO']
 
+		seal = self._calculate_seal(amount=amount, automaticResponseUrl=automaticResponseUrl, currencyCode=currencyCode,
+					interfaceVersion=interfaceVersion, merchantId=merchantId, normalReturnUrl=normalReturnUrl,
+					orderChannel=orderChannel
+					)
 
 
 
-	def _calculate_seal(self):
+
+
+
+	def _calculate_seal(self, **kwargs):
+
+		
 
 		print '====== gateway: _calculate_seal'
+
+		for key in sorted(kwargs):
+			print 'key: %s -- value: %s' % (key, kwargs[key])
+
+
+		print 'gesorteerd: ' + kwargs['test']
 
 		amount = '1000'
 		automaticResponseUrl = 'https://responseurl.com'
@@ -203,11 +222,11 @@ class Gateway(object):
 		transactionReference = '1232015021717313'
 
 
-		secret_key = bytes('002001000000001_KEY1').encode('utf-8')
+		secret_key = bytes('SIPS_OFFICE_SECRET_KEY').encode('utf-8')
 
 		print 'secret_key: ' + secret_key
 
-		string_concat = bytes(amount + automaticResponseUrl + currencyCode + interfaceVersion + normalReturnUrl + merchantId + orderChannel + paymentMeanBrand + paymentMeanType).encode('utf-8')
+		string_concat = bytes(amount + automaticResponseUrl + currencyCode + SIPS_OFFICE_INTERFACE_VERSION + normalReturnUrl + SIPS_OFFICE_JSON_MERCHANTID + orderChannel + paymentMeanType).encode('utf-8')
 
 		print 'string_concat: ' + string_concat
 
