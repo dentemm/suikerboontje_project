@@ -5,6 +5,7 @@ import hmac
 import hashlib
 import base64
 import collections
+import json
 
 
 '''
@@ -23,6 +24,7 @@ from oscar.apps.payment.exceptions import GatewayError
 SIPS_PAYPAGE_TEST_HOST = 'payment-webinit.simu.sips-atos.com'
 SIPS_PAYPAGE_LIVE_HOST = 'payment-webinit.sips-atos.com'
 SIPS_PAYPAGE_PATH = '/rs-services/v2/paymentInit/'
+SIPS_PAYPAGE_SECRET_KEY = '002001000000001_KEY1'
 
 
 SIPS_PATH = '/rs-services/v2/paymentInit/'
@@ -135,7 +137,7 @@ class Gateway(object):
 		Deze methode voert het initialization request uit naar de SIPS connector URL, en ontvangt een response object 
 		'''
 
-		connection = httplib.HTTPSConnection(SIPS_PAYPAGE_TEST_HOST, 443, timeout=20)
+		connection = httplib.HTTPSConnection(SIPS_PAYPAGE_TEST_HOST)
 		headers = {'Content-type': 'application/json', 'Accept': 'application/json'}
 		connection.request('POST', SIPS_PAYPAGE_PATH)
 
@@ -147,28 +149,30 @@ class Gateway(object):
 		print '************ gateway: _fetch_response()'
 
 		amount = '9876'
+		automaticResponseUrl = 'http://responseurl.com'
 		currencyCode = '978'
-		interfaceVersion = 'IR_WS_2.10'
+		interfaceVersion = 'IR_WS_2.9'
 		keyVersion = '1'
 		merchantId = '002001000000001'
 		normalReturnUrl = 'http://www.normalreturnurl.com'
 		orderChannel = 'INTERNET'
-		paymentMeanBrandList = ['VISA', 'MASTERCARD']
+		#paymentMeanBrandList = ['VISA', 'MASTERCARD']
 
-		response_dict = {
+		request_dict = {
 			'amount': amount,
+			'automaticResponseUrl': automaticResponseUrl,
 			'currencyCode' : currencyCode,
 			'interfaceVersion': interfaceVersion,
 			'keyVersion' : keyVersion,
 			'merchantId': merchantId,
 			'normalReturnUrl': normalReturnUrl,
 			'orderChannel': orderChannel,
-			'paymentMeanBrandList': paymentMeanBrandList
+			#'paymentMeanBrandList': paymentMeanBrandList
 		}
 
 		concat_string = ''
 
-		for key in sorted(response_dict):
+		for key in sorted(request_dict):
 
 			if key == 'keyVersion':
 
@@ -182,21 +186,28 @@ class Gateway(object):
 
 			else: 
 				print 'key: ' + key
-				concat_string += str(response_dict[key])
+				concat_string += str(request_dict[key])
 				print concat_string
 
 
+		signature = self._calculate_seal(concat_string, SIPS_PAYPAGE_SECRET_KEY)
+
+		request_dict['seal'] = signature
+
+		print 'request dict: ' + str(request_dict)
+
+		json_dict = json.dumps(request_dict)
+
+		print 'json dict: ' + str(json_dict)
+
 
 		
-
-		#message, key = self._calculate_seal()
-		signature = self._calculate_seal(test='test', nog_eentje='een ander', derde='derde', zomer='zomer')
 
 		#print 'message: ' + message
 		#print 'secret_key: ' + key
 		print 'signature: ' + signature
 
-		connection = httplib.HTTPSConnection(SIPS_OFFICE_JSON_HOST, 443, timeout=20)
+		connection = httplib.HTTPSConnection(SIPS_PAYPAGE_TEST_HOST, 443, timeout=20)
 
 		print 'connection ok'
 
@@ -204,7 +215,7 @@ class Gateway(object):
 
 		print 'headers ok'
 
-		connection.request('POST', '/rs-services/v2/paymentInit/', signature, headers)
+		connection.request('POST', SIPS_PAYPAGE_PATH, json_dict, headers)
 
 		print 'request ok'
 
@@ -216,7 +227,7 @@ class Gateway(object):
 
 		print 'json response ok'
 
-		print 'response status code: ' + str(response.status)
+		print 'response status code: ' + str(response.status) + '  ' + str(response.reason)
 		print 'response: ' + str(json_response)
 
 		print 'done'
@@ -254,7 +265,7 @@ class Gateway(object):
 
 
 
-	def _calculate_seal(self, **kwargs):
+	def _calculate_seal(self, concat_string, secret):
 		'''
 		Deze methode berekent de seal, alle vereiste velden worden als **kwargs parameters aangeboden
 		De return value is een string die als seal geldt
@@ -263,54 +274,14 @@ class Gateway(object):
 
 		print '************** gateway: _calculate_seal()'
 
-		kwargs_string = ''
-
-		# Sorteer de kwargs
-		for key in sorted(kwargs):
-			#print 'key: %s -- value: %s' % (key, kwargs[key])
-			kwargs_string += kwargs[key]
-
-		print 'kwargs_string: ' + kwargs_string
-
-		message = bytes(kwargs_string).encode('utf-8')
-		secret = bytes(SIPS_PASSWORD).encode('utf-8')
+		message = bytes(concat_string).encode('utf-8')
+		secret = bytes(secret).encode('utf-8')
 
 		sig = base64.b64encode(hmac.new(secret, message, digestmod=hashlib.sha256).digest())
 
-		print 'nieuwe: ' + sig
+		print 'seal sig: ' + sig
 
-
-
-		amount = '1000'
-		automaticResponseUrl = 'https://responseurl.com'
-		currencyCode = '978'
-		interfaceVersion = 'IR_WS_2.8'
-		keyVersion = '1' # geen onderdeel van string_concat want mag niet worden gebruikt om seal te bereken
-		#merchantId = '000000000000012'
-		merchantId = '002001000000001'
-		normalReturnUrl = 'https://responseurl2.com'
-		orderChannel = 'INTERNET'
-		paymentMeanBrand = 'BCMC'
-		paymentMeanType = 'CARD'
-		transactionReference = '1232015021717313'
-
-
-		secret_key = bytes('SIPS_OFFICE_SECRET_KEY').encode('utf-8')
-
-		print 'secret_key: ' + secret_key
-
-		string_concat = bytes(amount + automaticResponseUrl + currencyCode + SIPS_OFFICE_INTERFACE_VERSION + normalReturnUrl + SIPS_OFFICE_JSON_MERCHANTID + orderChannel + paymentMeanType).encode('utf-8')
-
-		print 'string_concat: ' + string_concat
-
-		signature = base64.b64encode(hmac.new(secret_key, string_concat, digestmod=hashlib.sha256).digest())
-
-		print 'signature: ' + signature
-
-		#utf_string_concat = unicode(s, "utf-8")
-
-		return signature
-
+		return sig
 
 
 
