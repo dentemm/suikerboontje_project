@@ -23,7 +23,8 @@ from oscar.apps.payment.exceptions import GatewayError
 # SIPS JSON PAYPAGE
 SIPS_PAYPAGE_TEST_HOST = 'payment-webinit.simu.sips-atos.com'
 SIPS_PAYPAGE_LIVE_HOST = 'payment-webinit.sips-atos.com'
-SIPS_PAYPAGE_PATH = '/rs-services/v2/paymentInit/'
+SIPS_PAYPAGE_PATH = '/rs-services/v2/paymentInit'
+SIPS_PAYPAGE_URL = 'payment-webinit.simu.sips-atos/rs-services/v2/paymentInit/'
 SIPS_PAYPAGE_SECRET_KEY = '002001000000001_KEY1'
 
 
@@ -196,7 +197,7 @@ class Gateway(object):
 
 		print 'request dict: ' + str(request_dict)
 
-		json_dict = json.dumps(request_dict)
+		json_dict = json.dumps(request_dict).encode('utf-8')
 
 		print 'json dict: ' + str(json_dict)
 
@@ -208,6 +209,8 @@ class Gateway(object):
 		print 'signature: ' + signature
 
 		connection = httplib.HTTPSConnection(SIPS_PAYPAGE_TEST_HOST, 443, timeout=20)
+		#connection = httplib.HTTPSConnection(SIPS_PAYPAGE_URL, 443, timeout=20)
+
 
 		print 'connection ok'
 
@@ -215,7 +218,8 @@ class Gateway(object):
 
 		print 'headers ok'
 
-		connection.request('POST', SIPS_PAYPAGE_PATH, json_dict, headers)
+		connection.request('POST', SIPS_PAYPAGE_TEST_HOST, json_dict, headers)
+		#connection.request('POST', json_dict, headers)
 
 		print 'request ok'
 
