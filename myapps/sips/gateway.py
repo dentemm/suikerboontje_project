@@ -20,7 +20,11 @@ from oscar.apps.payment.exceptions import GatewayError
 
 
 # SIPS JSON PAYPAGE
-SIPS_HOST = 'payment-webinit.simu.sips-atos.com'
+SIPS_PAYPAGE_TEST_HOST = 'payment-webinit.simu.sips-atos.com'
+SIPS_PAYPAGE_LIVE_HOST = 'payment-webinit.sips-atos.com'
+SIPS_PAYPAGE_PATH = '/rs-services/v2/paymentInit/'
+
+
 SIPS_PATH = '/rs-services/v2/paymentInit/'
 SIPS_MERCHANT = '002001000000001'
 SIPS_PASSWORD = '002001000000001_KEY1'	# secret key
@@ -113,10 +117,6 @@ class SipsResponse(object):
 
 
 
-
-
-
-
 class Gateway(object):
 
 	def __init__(self, sips_url, merchantId='002001000000001', keyVersion='1', orderChannel='INTERNET', interfaceVersion='IR_WS_2.10', paymentMeanBrand='BCMC', paymentMeanType='CARD'):
@@ -128,6 +128,16 @@ class Gateway(object):
 		self._interfaceVersion = interfaceVersion
 		self._paymentMeanBrand = paymentMeanBrand
 		self._paymentMeanType = paymentMeanType
+
+
+	def _initization_request(self, json_request):
+		'''
+		Deze methode voert het initialization request uit naar de SIPS connector URL, en ontvangt een response object 
+		'''
+
+		connection = httplib.HTTPSConnection(SIPS_PAYPAGE_TEST_HOST, 443, timeout=20)
+		headers = {'Content-type': 'application/json', 'Accept': 'application/json'}
+		connection.request('POST', SIPS_PAYPAGE_PATH)
 
 	def _fetch_response(self, json_request):
 		'''
