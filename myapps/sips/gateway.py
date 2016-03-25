@@ -213,7 +213,7 @@ class Gateway(object):
 		print 'signature: ' + signature
 
 		try:
-			r = requests.post(SIPS_PAYPAGE_URL, json=json_dict)
+			r = requests.post(SIPS_PAYPAGE_URL, json=request_dict)
 
 		except ConnectionError:
 			print 'godver'
