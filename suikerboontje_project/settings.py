@@ -98,6 +98,7 @@ INSTALLED_APPS = [
     'widget_tweaks',
 
     # third party
+    'Crypto'
 
 
 ] + get_core_apps(['myapps.checkout'])

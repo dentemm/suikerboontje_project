@@ -9,6 +9,8 @@ import json
 
 import requests
 
+from Crypto.Hash import HMAC, SHA256
+
 
 '''
 message = bytes('field_values').encode('utf-8')
@@ -28,6 +30,7 @@ SIPS_PAYPAGE_LIVE_HOST = 'payment-webinit.sips-atos.com'
 SIPS_PAYPAGE_PATH = '/rs-services/v2/paymentInit/'
 SIPS_PAYPAGE_URL = 'https://payment-webinit.simu.sips-atos.com/rs-services/v2/paymentInit/'
 SIPS_PAYPAGE_SECRET_KEY = '002001000000001_KEY1'
+SIPS_PAYPAGE_MERCHANT = '002001000000001'
 
 
 SIPS_PATH = '/rs-services/v2/paymentInit'
@@ -83,20 +86,6 @@ class SipsRequest(object):
 		self._paymentMeanBrand = paymentMeanBrand
 		self._paymentMeanType = paymentMeanType
 
-	def calculateSeal(self, **kwargs):
-
-		# documentatie dict sorteren: http://pythoncentral.io/how-to-sort-python-dictionaries-by-key-or-value/ 
-		# documentatie SHA encryptie:
-		# http://www.jokecamp.com/blog/examples-of-creating-base64-hashes-using-hmac-sha256-in-different-languages/#python
-
-
-		my_list = [value for (key, value) in sorted(kwargs.items())]
-
-		concat_string = ''
-
-		for (key, value) in sorted(kwargs.items()):
-			concat_string.append(value)
-
 
 
 class SipsResponse(object):
@@ -151,15 +140,15 @@ class Gateway(object):
 
 		print '************ gateway: _fetch_response()'
 
-		amount = '9876'
-		automaticResponseUrl = 'http://responseurl.com'
+		amount = '1000'
+		automaticResponseUrl = 'https://responseurl.com'
 		currencyCode = '978'
-		interfaceVersion = 'IR_WS_2.9'
+		interfaceVersion = 'IR_WS_2.8'
 		keyVersion = '1'
-		merchantId = '002001000000001'
-		normalReturnUrl = 'http://www.normalreturnurl.com'
+		merchantId = SIPS_PAYPAGE_MERCHANT
+		normalReturnUrl = 'https://responseurl2.com'
 		orderChannel = 'INTERNET'
-		transactionReference = 'mijnRef'
+		transactionReference = '1232015021717313'
 		#paymentMeanBrandList = ['VISA', 'MASTERCARD']
 
 		request_dict = {
@@ -172,7 +161,6 @@ class Gateway(object):
 			'normalReturnUrl': normalReturnUrl,
 			'orderChannel': orderChannel,
 			'transactionReference': transactionReference,
-			#'paymentMeanBrandList': paymentMeanBrandList
 		}
 
 		concat_string = ''
@@ -189,6 +177,11 @@ class Gateway(object):
 				print 'negeer!!!!' + key
 				continue
 
+#			elif key == 'interfaceVersion':
+#
+#				print 'negeer!!!!' + key
+#				continue
+
 			else: 
 				print 'key: ' + key
 				concat_string += str(request_dict[key])
@@ -201,12 +194,9 @@ class Gateway(object):
 
 		print 'request dict: ' + str(request_dict)
 
-		json_dict = json.dumps(request_dict).encode('utf-8')
+		#json_dict = json.dumps(request_dict).encode('utf-8')
 
-		print 'json dict: ' + str(json_dict)
-
-
-		
+		#print 'json dict: ' + str(json_dict)
 
 		#print 'message: ' + message
 		#print 'secret_key: ' + key
@@ -219,69 +209,13 @@ class Gateway(object):
 			print 'godver'
 
 		print 'requests: ' + str(r.status_code)
-
-		connection = httplib.HTTPSConnection(SIPS_PAYPAGE_TEST_HOST)
-		#connection = httplib.HTTPSConnection(SIPS_PAYPAGE_URL, 443, timeout=20)
-
-
-		print 'connection ok'
-
-		headers = {'Content-type': 'application/json', 'Accept': ''}
-
-		print 'headers ok'
-
-		connection.request('POST', '/rs-services/v2/paymentInit/', json_dict, headers)
-		#connection.request('POST', json_dict, headers)
-
-		print 'request ok'
-
-		response = connection.getresponse()
-
-		print 'response ok'
-
-		json_response = response.read()
-
-		print 'json response ok'
-
-		print 'response status code: ' + str(response.status) + '  ' + str(response.reason)
-		print 'response: ' + str(json_response)
-
-		print 'done'
-
-
-
-	def _build_json_request(self, method_name, **kwargs):
-		'''
-		Maak de nodige json string aan voor de betaling interface
-		'''
-
-		print '====== gateway: _build_json_request'
-
-		amount = kwargs.get('amount', '')
-		automaticResponseUrl = kwargs.get('automaticResponseUrl', '')
-
-		# fixed fields, deze blijven hetzelfde voor elk request
-		currencyCode = '978'
-		interfaceVersion = 'IR_WS_2.9'
-		keyVersion = '1'
-		normalReturnUrl = 'http://suikerboontje.sites.djangoeurope.com'
-		orderChannel = 'INTERNET'
-		paymentMeanBrandList = ['VISA', 'MASTERCARD', 'MAESTRO']
-
-		seal = self._calculate_seal(amount=amount, automaticResponseUrl=automaticResponseUrl, currencyCode=currencyCode,
-					interfaceVersion=interfaceVersion, merchantId=merchantId, normalReturnUrl=normalReturnUrl,
-					orderChannel=orderChannel
-					)
-
-		data_dict = {}
-		json_dict = json.dumps(data_dict)
+		print 'request reponse: ' + str(r.json())
 
 
 
 
 
-
-	def _calculate_seal(self, concat_string, secret):
+	def _calculate_seal(self, concat_string, secret_key):
 		'''
 		Deze methode berekent de seal, alle vereiste velden worden als **kwargs parameters aangeboden
 		De return value is een string die als seal geldt
@@ -291,14 +225,23 @@ class Gateway(object):
 		print '************** gateway: _calculate_seal()'
 
 		message = bytes(concat_string).encode('utf-8')
-		secret = bytes(secret).encode('utf-8')
+		secret = bytes(secret_key) #.encode('utf-8')
 
-		sig = base64.b64encode(hmac.new(secret, message, digestmod=hashlib.sha256).digest())
+		#secret = secret_key
+
+		#message = bytes('Message').encode('utf-8')
+		#secret = bytes('secret').encode('utf-8')
+
+		#sig = base64.b64encode(hmac.new(secret, message, digestmod=hashlib.sha256).digest())
+		#sig = base64.b64encode(hmac.new('secret', 'Message', digestmod=hashlib.sha256).digest())
+
+		#sig = hmac.new(secret, message, digestmod=hashlib.sha256).digest()
+
+		sig = HMAC.new(key=secret, msg=message, digestmod=SHA256).hexdigest()
 
 		print 'seal sig: ' + sig
 
 		return sig
-
 
 
 	def _check_kwargs(self, kwargs, required_keys):
