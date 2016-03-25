@@ -19,8 +19,12 @@ from django.contrib import admin
 
 from oscar.app import application
 
+
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
+
+    # SIPS url's
+    url(r'^checkout/sips/', include('myapps.sips.urls')),
 
     url(r'', include(application.urls)),
 ]

@@ -1,15 +1,14 @@
 # -*- coding: utf-8 -*-
 
-import httplib
 import hmac 
 import hashlib
 import base64
 import collections
 import json
-
 import requests
-
 from Crypto.Hash import HMAC, SHA256
+
+from django.shortcuts import redirect
 
 
 '''
@@ -148,7 +147,7 @@ class Gateway(object):
 		merchantId = SIPS_PAYPAGE_MERCHANT
 		normalReturnUrl = 'https://responseurl2.com'
 		orderChannel = 'INTERNET'
-		transactionReference = '1232015021717313'
+		transactionReference = 'toptim1'
 		#paymentMeanBrandList = ['VISA', 'MASTERCARD']
 
 		request_dict = {
@@ -203,15 +202,18 @@ class Gateway(object):
 		print 'signature: ' + signature
 
 		try:
-			r = requests.post(SIPS_PAYPAGE_URL, json=request_dict)
+			response = requests.post(SIPS_PAYPAGE_URL, json=request_dict)
 
 		except ConnectionError:
 			print 'godver'
 
-		print 'requests: ' + str(r.status_code)
-		print 'request reponse: ' + str(r.json())
+		print 'requests: ' + str(response.status_code)
+		print 'request reponse: ' + str(response.json())
 
 
+		redirect 
+
+		return response.json()
 
 
 
