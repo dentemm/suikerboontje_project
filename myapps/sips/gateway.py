@@ -9,6 +9,7 @@ import requests
 from Crypto.Hash import HMAC, SHA256
 
 from django.shortcuts import redirect
+from django.http import HttpResponseRedirect
 
 
 '''
@@ -147,7 +148,7 @@ class Gateway(object):
 		merchantId = SIPS_PAYPAGE_MERCHANT
 		normalReturnUrl = 'https://responseurl2.com'
 		orderChannel = 'INTERNET'
-		transactionReference = 'toptim2'
+		transactionReference = 'toptim10'
 		#paymentMeanBrandList = ['VISA', 'MASTERCARD']
 
 		request_dict = {
@@ -206,6 +207,16 @@ class Gateway(object):
 
 			print '--------SIPS CONNECTOR: SUCCESS'
 			print 'url: ' + json_response['redirectionUrl']
+
+			url = str(json_response['redirectionUrl'])
+
+			print 'url verwerkt: ' + url
+
+			return url
+
+			print 'echt?????'
+
+
 
 		else:
 			print '--------SIPS CONNECTOR: FAILURE'
@@ -280,5 +291,7 @@ class Gateway(object):
 #			print key + ': ' + str(kwargs[key])
 
 
-		self._fetch_response(None)
+		return self._fetch_response(None)
+
+
 

@@ -1,6 +1,7 @@
 from oscar.apps.checkout.views import PaymentDetailsView as OscarPaymentDetailsView
 from oscar.apps.payment import models
 from oscar.apps.payment.forms import BankcardForm
+from oscar.apps.payment.exceptions import RedirectRequired
 
 from myapps.sips.facade import Facade
 
@@ -44,7 +45,9 @@ class PaymentDetailsView(OscarPaymentDetailsView):
 
         print 'facade aangemaakt?'
 
-        payment_ref = facade.pre_authorise(order_number, total.incl_tax)
+        url = facade.pre_authorise(order_number, total.incl_tax)
+
+        raise RedirectRequired(url)
 
         # Payment successful! Record payment source
         source_type, __ = models.SourceType.objects.get_or_create(
@@ -57,6 +60,9 @@ class PaymentDetailsView(OscarPaymentDetailsView):
 
         # Record payment event
         self.add_payment_event('auth', total.incl_tax)
+
+
+        raise RedirectRequired(url)
 
     def submit(self, user, basket, shipping_address, shipping_method, shipping_charge, billing_address, order_total, payment_kwargs=None, order_kwargs=None):
         '''
