@@ -147,7 +147,7 @@ class Gateway(object):
 		merchantId = SIPS_PAYPAGE_MERCHANT
 		normalReturnUrl = 'https://responseurl2.com'
 		orderChannel = 'INTERNET'
-		transactionReference = 'toptim1'
+		transactionReference = 'toptim2'
 		#paymentMeanBrandList = ['VISA', 'MASTERCARD']
 
 		request_dict = {
@@ -167,31 +167,20 @@ class Gateway(object):
 		for key in sorted(request_dict):
 
 			if key == 'keyVersion':
-
-				print 'negeer!!!!' + key
 				continue
 
 			elif key == 'sealAlgorithm':
-
-				print 'negeer!!!!' + key
 				continue
 
-#			elif key == 'interfaceVersion':
-#
-#				print 'negeer!!!!' + key
-#				continue
-
 			else: 
-				print 'key: ' + key
 				concat_string += str(request_dict[key])
-				print concat_string
 
 
 		signature = self._calculate_seal(concat_string, SIPS_PAYPAGE_SECRET_KEY)
 
 		request_dict['seal'] = signature
 
-		print 'request dict: ' + str(request_dict)
+		#print 'request dict: ' + str(request_dict)
 
 		#json_dict = json.dumps(request_dict).encode('utf-8')
 
@@ -199,7 +188,7 @@ class Gateway(object):
 
 		#print 'message: ' + message
 		#print 'secret_key: ' + key
-		print 'signature: ' + signature
+		#print 'signature: ' + signature
 
 		try:
 			response = requests.post(SIPS_PAYPAGE_URL, json=request_dict)
@@ -210,8 +199,17 @@ class Gateway(object):
 		print 'requests: ' + str(response.status_code)
 		print 'request reponse: ' + str(response.json())
 
+		json_response = response.json()
 
-		redirect 
+
+		if json_response['redirectionStatusCode'] == '00':
+
+			print '--------SIPS CONNECTOR: SUCCESS'
+			print 'url: ' + json_response['redirectionUrl']
+
+		else:
+			print '--------SIPS CONNECTOR: FAILURE'
+
 
 		return response.json()
 
@@ -276,10 +274,10 @@ class Gateway(object):
 		De pre methode wordt gebruikt om betaling onmiddellijk te innen vooraleer order processing plaats vindt
 		'''
 
-		print '********** gateway methode: pre-auth!'
-
-		for key in kwargs:
-			print key + ': ' + str(kwargs[key])
+#		print '********** gateway methode: pre-auth!'
+#
+#		for key in kwargs:
+#			print key + ': ' + str(kwargs[key])
 
 
 		self._fetch_response(None)
