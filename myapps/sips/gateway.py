@@ -148,7 +148,7 @@ class Gateway(object):
 		merchantId = SIPS_PAYPAGE_MERCHANT
 		normalReturnUrl = 'https://responseurl2.com'
 		orderChannel = 'INTERNET'
-		transactionReference = 'toptim23'
+		transactionReference = 'toptim31'
 		#paymentMeanBrandList = ['VISA', 'MASTERCARD']
 
 		request_dict = {

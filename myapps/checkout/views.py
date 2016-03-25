@@ -1,4 +1,6 @@
 import requests
+import httplib
+import logging
 
 from django import http
 
@@ -8,6 +10,9 @@ from oscar.apps.payment.forms import BankcardForm
 from oscar.apps.payment.exceptions import RedirectRequired
 
 from myapps.sips.facade import Facade
+
+
+logger = logging.getLogger('oscar.checkout')
 
 
 class PaymentDetailsView(OscarPaymentDetailsView):
@@ -58,6 +63,21 @@ class PaymentDetailsView(OscarPaymentDetailsView):
 
         print 'DATATA %s - %s - %s' % (url, redirectionVersion, redirectionData)
 
+        logger.info("Order: redirecting to %s", url)
+
+
+        print 'logger executed!!'
+
+
+        # vanilla django
+
+        return http.HttpResponseRedirect(url)
+
+        '''
+        # test http lib
+
+
+        # test requests
         
         response = requests.post(url, json=data, allow_redirects=True)
 
@@ -69,9 +89,10 @@ class PaymentDetailsView(OscarPaymentDetailsView):
 
         print 'AAAAAAAAAAAAAH'
 
-        http.HttpResponseRedirect(url)
+        return http.HttpResponseRedirect(url)
 
         print 'RAISE HIERONDER'
+        '''
 
 
         raise RedirectRequired(url)
