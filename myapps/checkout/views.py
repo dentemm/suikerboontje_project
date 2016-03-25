@@ -1,3 +1,7 @@
+import requests
+
+from django import http
+
 from oscar.apps.checkout.views import PaymentDetailsView as OscarPaymentDetailsView
 from oscar.apps.payment import models
 from oscar.apps.payment.forms import BankcardForm
@@ -45,7 +49,30 @@ class PaymentDetailsView(OscarPaymentDetailsView):
 
         print 'facade aangemaakt?'
 
-        url = facade.pre_authorise(order_number, total.incl_tax)
+        url, redirectionVersion, redirectionData = facade.pre_authorise(order_number, total.incl_tax)
+
+        data = {
+            'redirectionVersion': redirectionVersion,
+            'redirectionData': redirectionData
+        }
+
+        print 'DATATA %s - %s - %s' % (url, redirectionVersion, redirectionData)
+
+        
+        response = requests.post(url, json=data, allow_redirects=True)
+
+
+        print 'GRRRRRRRRRRRRRR'
+
+        print response.status_code
+        print str(response)
+
+        print 'AAAAAAAAAAAAAH'
+
+        http.HttpResponseRedirect(url)
+
+        print 'RAISE HIERONDER'
+
 
         raise RedirectRequired(url)
 

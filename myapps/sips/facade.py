@@ -56,7 +56,7 @@ class Facade(object):
 
 		print '************** Facade: pre_authorise methode'
 
-		url = self.gateway.pre(
+		url, redirectionVersion, redirectionData = self.gateway.pre(
 				amount=amount,
 				currency=currency,
 				merchantId=SIPS_MERCHANT,
@@ -64,6 +64,6 @@ class Facade(object):
 
 		print 'facade -- response: ' + str(url)
 
-		return url
+		return url, redirectionVersion, redirectionData
 
 

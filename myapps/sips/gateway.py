@@ -148,7 +148,7 @@ class Gateway(object):
 		merchantId = SIPS_PAYPAGE_MERCHANT
 		normalReturnUrl = 'https://responseurl2.com'
 		orderChannel = 'INTERNET'
-		transactionReference = 'toptim10'
+		transactionReference = 'toptim23'
 		#paymentMeanBrandList = ['VISA', 'MASTERCARD']
 
 		request_dict = {
@@ -209,10 +209,14 @@ class Gateway(object):
 			print 'url: ' + json_response['redirectionUrl']
 
 			url = str(json_response['redirectionUrl'])
+			redirectionVersion = str(json_response['redirectionVersion'])
+			redirectionData = str(json_response['redirectionData'])
 
 			print 'url verwerkt: ' + url
+			print redirectionVersion
+			print redirectionData
 
-			return url
+			return url, redirectionVersion, redirectionData
 
 			print 'echt?????'
 
