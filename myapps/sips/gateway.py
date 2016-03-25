@@ -26,7 +26,7 @@ from oscar.apps.payment.exceptions import GatewayError
 SIPS_PAYPAGE_TEST_HOST = 'payment-webinit.simu.sips-atos.com'
 SIPS_PAYPAGE_LIVE_HOST = 'payment-webinit.sips-atos.com'
 SIPS_PAYPAGE_PATH = '/rs-services/v2/paymentInit/'
-SIPS_PAYPAGE_URL = 'https://payment-webinit.simu.sips-atos/rs-services/v2/paymentInit/'
+SIPS_PAYPAGE_URL = 'https://payment-webinit.simu.sips-atos.com/rs-services/v2/paymentInit/'
 SIPS_PAYPAGE_SECRET_KEY = '002001000000001_KEY1'
 
 
@@ -212,9 +212,13 @@ class Gateway(object):
 		#print 'secret_key: ' + key
 		print 'signature: ' + signature
 
-		r = requests.get('http://www.thinkmobile.be/')
+		try:
+			r = requests.post(SIPS_PAYPAGE_URL, json=json_dict)
 
-		print 'requests: ' + r.status_code
+		except ConnectionError:
+			print 'godver'
+
+		print 'requests: ' + str(r.status_code)
 
 		connection = httplib.HTTPSConnection(SIPS_PAYPAGE_TEST_HOST)
 		#connection = httplib.HTTPSConnection(SIPS_PAYPAGE_URL, 443, timeout=20)
