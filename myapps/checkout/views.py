@@ -73,6 +73,8 @@ class PaymentDetailsView(OscarPaymentDetailsView):
 
         return http.HttpResponseRedirect(url)
 
+        print 'HttpResponseRedirect uitgevoerd'
+
         '''
         # test http lib
 

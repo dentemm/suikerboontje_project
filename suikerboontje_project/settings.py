@@ -323,3 +323,5 @@ OSCAR_DASHBOARD_NAVIGATION = [
 
 OSCAR_DEFAULT_CURRENCY = 'EUR'
 
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
