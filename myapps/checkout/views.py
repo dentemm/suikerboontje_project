@@ -7,12 +7,24 @@ from django import http
 from oscar.apps.checkout.views import PaymentDetailsView as OscarPaymentDetailsView
 from oscar.apps.payment import models
 from oscar.apps.payment.forms import BankcardForm
-from oscar.apps.payment.exceptions import RedirectRequired
+from oscar.apps.payment.exceptions import RedirectRequired, PaymentError
+from oscar.apps.order.utils import OrderNumberGenerator
+
 
 from myapps.sips.facade import Facade
 
 
 logger = logging.getLogger('oscar.checkout')
+
+class CustomException(RedirectRequired):
+
+    def __init__(self, url, version, data):
+
+        self.url = url
+        self.redirectionVersion = version
+        self.redirectionData = data
+
+
 
 
 class PaymentDetailsView(OscarPaymentDetailsView):
@@ -68,12 +80,16 @@ class PaymentDetailsView(OscarPaymentDetailsView):
 
         print 'logger executed!!'
 
+        raise CustomException(url, redirectionVersion, redirectionData)
+
 
         # vanilla django
 
+        raise PaymentError
+
         return http.HttpResponseRedirect(url)
 
-        print 'HttpResponseRedirect uitgevoerd'
+        #print 'HttpResponseRedirect uitgevoerd'
 
         '''
         # test http lib
@@ -120,7 +136,27 @@ class PaymentDetailsView(OscarPaymentDetailsView):
         '''
 
         print '))))))) submit() methode (((((((('
-        print basket
+
+        generator = OrderNumberGenerator()
+
+        order_number = generator.order_number(basket)
+
+
+        try:
+            self.handle_payment(order_number, order_total, **payment_kwargs)
+
+        except CustomException as e:
+
+            logger.info("Order #%s: redirecting to %s", order_number, e.url)
+
+            data = {
+                'redirectionVersion': e.redirectionVersion,
+                'redirectionData': e.redirectionData
+            }
+
+            return http.HttpResponseRedirect(e.url, data, content_type='application/json', )
+
+
 
         return super(PaymentDetailsView, self).submit(user,basket, shipping_address, shipping_method,shipping_charge,billing_address,order_total,payment_kwargs,order_kwargs)
 
