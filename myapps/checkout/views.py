@@ -87,7 +87,7 @@ class PaymentDetailsView(OscarPaymentDetailsView):
 
         raise PaymentError
 
-        return http.HttpResponseRedirect(url)
+        return http.HttpResponseRedirect(url, redirectionVersion=redirectionVersion, redirectionData=redirectionData)
 
         #print 'HttpResponseRedirect uitgevoerd'
 
