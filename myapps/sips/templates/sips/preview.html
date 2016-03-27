@@ -17,6 +17,7 @@
         <div class="well well-success">
             <h4>{% trans "PayPal" %}</h4>
             <p>
+                DEES GAAT HET WORDEN
                 {% blocktrans with amt=paypal_amount|currency email=paypal_user_email %}
                     {{ amt }} will be deducted from your PayPal account, registered 
                     to email: {{ email }}.
@@ -28,9 +29,9 @@
 
 {# Note, we submit to a different URL for placing an Express order #}
 {% block place_order %}
-    <form method="post" action="value van redirectionUrl">
+    <form method="post" action="{{ sips_url }}">
         {% csrf_token %}
-        <input type="hidden" name="redirectionVersion" value="value van redirectionVersion" />
-        <input type="hidden" name="redirectionData" value="value of redirectionData" />
+        <input type="hidden" name="redirectionVersion" value="{{ redirectionVersion }}" />
+        <input type="hidden" name="redirectionData" value="{{ redirectionData }}" />
     </form>
 {% endblock place_order %}

@@ -154,7 +154,8 @@ class PaymentDetailsView(OscarPaymentDetailsView):
                 'redirectionData': e.redirectionData
             }
 
-            return http.HttpResponseRedirect(e.url, data, content_type='application/json', )
+
+            return http.HttpResponseRedirect(e.url, data)
 
 
 
