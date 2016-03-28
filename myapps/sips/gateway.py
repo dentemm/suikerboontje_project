@@ -137,6 +137,8 @@ class Gateway(object):
 		base_url = 'http://localhost:8000'
 		url_path = reverse('sips-response')
 
+		return_url = 'http://127.0.0.1:8000/checkout/thank-you/'
+
 
 		amount = '1000'
 		automaticResponseUrl = 'https://responseurl.com'
@@ -144,9 +146,9 @@ class Gateway(object):
 		interfaceVersion = 'IR_WS_2.8'
 		keyVersion = '1'
 		merchantId = SIPS_PAYPAGE_MERCHANT
-		normalReturnUrl = base_url+url_path
+		normalReturnUrl = return_url
 		orderChannel = 'INTERNET'
-		transactionReference = 'toptim56'
+		transactionReference = 'toptim60'
 		#paymentMeanBrandList = ['VISA', 'MASTERCARD']
 
 		request_dict = {

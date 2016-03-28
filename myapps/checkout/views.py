@@ -75,26 +75,6 @@ class PaymentDetailsView(OscarPaymentDetailsView):
 
         #print 'HttpResponseRedirect uitgevoerd'
 
-        '''
-        # test http lib
-
-
-        # test requests
-        
-        response = requests.post(url, json=data, allow_redirects=True)
-
-
-        print 'GRRRRRRRRRRRRRR'
-
-        print response.status_code
-        print str(response)
-
-        print 'AAAAAAAAAAAAAH'
-
-        return http.HttpResponseRedirect(url)
-
-        print 'RAISE HIERONDER'
-        '''
 
 
         raise RedirectRequired(url)
