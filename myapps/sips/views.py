@@ -18,11 +18,19 @@ class SipsRedirectView(RedirectView):
 
 		pass
 
-'''
+
 class SuccessResponseView(PaymentDetailsView):
 
 	template_name_preview = 'sips/preview.html'
-	'''
+
+	def post(self, request, *args, **kwargs):
+
+		pass
+
+	def get(self, request, *args, **kwargs):
+
+		pass
+	
 
 class ConfirmView(OrderPlacementMixin, View):
     """

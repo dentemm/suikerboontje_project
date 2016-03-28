@@ -67,17 +67,7 @@ class PaymentDetailsView(OscarPaymentDetailsView):
         raise SipsRedirectRequired(url, redirectionVersion, redirectionData)
 
 
-        # vanilla django
-
-        #raise PaymentError
-
-        return http.HttpResponseRedirect(url, redirectionVersion=redirectionVersion, redirectionData=redirectionData)
-
-        #print 'HttpResponseRedirect uitgevoerd'
-
-
-
-        raise RedirectRequired(url)
+    
 
         # Payment successful! Record payment source
         source_type, __ = models.SourceType.objects.get_or_create(
@@ -125,6 +115,7 @@ class PaymentDetailsView(OscarPaymentDetailsView):
 
             return http.HttpResponseRedirect(complete_url)
 
+
         return super(PaymentDetailsView, self).submit(user,basket, shipping_address, shipping_method,shipping_charge,billing_address,order_total,payment_kwargs,order_kwargs)
 
 
@@ -160,4 +151,19 @@ class PaymentDetailsView(OscarPaymentDetailsView):
         # page.  If validating form data and it's invalid, then call the
         # render_payment_details view.
         return self.render_preview(request)
+
+class SuccessResponseMixin(OscarPaymentDetailsView):
+
+    template_name_preview = 'sips/preview.html'
+
+
+    def post(self, request, *args, **kwargs):
+
+        try: 
+            data = request.POST['data']
+            print data
+
+        except KeyError:
+
+            print 'shiiiiiiiiiiiiiiiiiit!'
 
