@@ -3,6 +3,7 @@ Django==1.8.6
 Pillow==2.7.0
 Unidecode==0.04.18
 django-appconf==1.0.1
+django-braces==1.8.1
 django-compressor==1.5
 django-extra-views==0.6.4
 django-haystack==2.3.2

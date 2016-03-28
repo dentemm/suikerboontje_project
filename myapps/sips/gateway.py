@@ -9,7 +9,6 @@ import requests
 from Crypto.Hash import HMAC, SHA256
 
 from django.shortcuts import redirect
-from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 
 
@@ -49,6 +48,18 @@ SIPS_OFFICE_INTERFACE_VERSION = 'IR_WS_2.11'
 
 # Response status codes
 SUCCESS, MERCHANT_INVALID, TRANSACTION_INVALID, REQUEST_INVALID, SECURITY_ERROR = '00', '03', '12', '30', '34'
+
+
+def post(url, params):
+	'''
+	Deze methode voert het post request naar de sips paypage uit, en retourneert het antwoord van de server
+	'''
+
+	payload = urlencode(params)
+
+	reponse = requests.post(url, payload, headers={'content-type': 'text/namevalue, charset=utf-8'})
+
+
 
 
 class SipsRequest(object):
@@ -147,7 +158,7 @@ class Gateway(object):
 		#normalReturnUrl = return_url
 		normalReturnUrl = base_url + url_path
 		orderChannel = 'INTERNET'
-		transactionReference = 'toptim65'
+		transactionReference = 'toptim72'
 		#paymentMeanBrandList = ['VISA', 'MASTERCARD']
 
 		request_dict = {

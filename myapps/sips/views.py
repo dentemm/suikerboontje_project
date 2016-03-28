@@ -2,6 +2,8 @@ from django.views.generic import RedirectView, View
 
 from oscar.apps.checkout.views import OrderPlacementMixin, PaymentDetailsView
 
+from braces.views import JsonRequestResponseMixin
+
 
 # Load views dynamically
 #PaymentDetailsView = get_class('checkout.views', 'PaymentDetailsView')
@@ -19,20 +21,26 @@ class SipsRedirectView(RedirectView):
 		pass
 
 
-class SuccessResponseView(PaymentDetailsView):
+class SuccessResponseView(JsonRequestResponseMixin, View):
 	'''
 	Handle response from Sips
 	'''
 
-	template_name_preview = 'sips/preview.html'
+	print '--------success response view --------------'
+
+	template_name_preview = 'sips/sips.html'
 
 	def post(self, request, *args, **kwargs):
 
 		print ' ------------------ RETURN GET -------------'
 
+		return None
+
 	def get(self, request, *args, **kwargs):
 
 		print '---------RETURN POST ---------'
+
+		return None
 	
 
 class ConfirmView(OrderPlacementMixin, View):

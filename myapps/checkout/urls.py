@@ -6,5 +6,5 @@ from . import views
 
 urlpatterns = patterns('',
  
-    url(r'place-order/$', views.SuccessResponseView.as_view(), name='sips-place-order')
+    url(r'place-order/$', views.SuccessResponseView.as_view(), name='sips-place-order'),
 )
