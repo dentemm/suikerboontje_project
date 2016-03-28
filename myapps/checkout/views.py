@@ -12,6 +12,7 @@ from oscar.apps.payment.forms import BankcardForm
 from oscar.apps.payment.exceptions import RedirectRequired, PaymentError
 from oscar.apps.order.utils import OrderNumberGenerator
 
+from braces.views import JsonRequestResponseMixin
 
 from myapps.sips.facade import Facade
 
@@ -158,12 +159,16 @@ class PaymentDetailsView(OscarPaymentDetailsView):
 
         return super(PaymentDetailsView, self).post(request, *args, **kwargs)
 
-class SuccessResponseMixin(OscarPaymentDetailsView):
+class SuccessResponseView(JsonRequestResponseMixin, OscarPaymentDetailsView):
+
+    print 'success response view'
 
     template_name_preview = 'sips/preview.html'
 
 
     def post(self, request, *args, **kwargs):
+
+        print ' ++++++ success reponse view'
 
         try: 
             data = request.POST['data']

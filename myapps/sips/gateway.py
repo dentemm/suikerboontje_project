@@ -144,21 +144,22 @@ class Gateway(object):
 		print '************ gateway: _fetch_response()'
 
 		base_url = 'http://127.0.0.1:8000'
-		url_path = reverse('sips-response')
+		url_path = reverse('sips-place-order')
 
-		return_url = 'http://127.0.0.1:8000/checkout/thank-you/'
+		#return_url = 'http://127.0.0.1:8000/checkout/thank-you/'
+		return_url = 'http://127.0.0.1:8000/checkout/sips/place-order/'
 
 
 		amount = '1000'
-		automaticResponseUrl = base_url + url_path
+		automaticResponseUrl = return_url
 		currencyCode = '978'
 		interfaceVersion = 'IR_WS_2.8'
 		keyVersion = '1'
 		merchantId = SIPS_PAYPAGE_MERCHANT
 		#normalReturnUrl = return_url
-		normalReturnUrl = base_url + url_path
+		normalReturnUrl = return_url
 		orderChannel = 'INTERNET'
-		transactionReference = 'toptim72'
+		transactionReference = 'toptim76'
 		#paymentMeanBrandList = ['VISA', 'MASTERCARD']
 
 		request_dict = {

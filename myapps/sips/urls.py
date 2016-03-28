@@ -18,6 +18,6 @@ from . import views
 urlpatterns = patterns('',
     #url(r'^redirect/', views.RedirectView.as_view(), name='gocardless-redirect'),
     url(r'^confirm/$', csrf_exempt(views.ConfirmView.as_view()), name='sips-response'),
-    url(r'^place-order/$', views.SuccessResponseView.as_view(), name='sips-place-order'),
+    url(r'^place-order/$', csrf_exempt(views.SuccessResponseView.as_view()), name='sips-place-order'),
     #url(r'^cancel/', views.CancelView.as_view(), name='gocardless-cancel'),
 )

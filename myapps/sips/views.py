@@ -32,13 +32,15 @@ class SuccessResponseView(JsonRequestResponseMixin, View):
 
 	def post(self, request, *args, **kwargs):
 
-		print ' ------------------ RETURN GET -------------'
+		print ' ------------------ RETURN POST -------------'
+
+		print 'return data: ' + str(request.POST.get('Data', 'default'))
 
 		return None
 
 	def get(self, request, *args, **kwargs):
 
-		print '---------RETURN POST ---------'
+		print '---------RETURN GET ---------'
 
 		return None
 	
