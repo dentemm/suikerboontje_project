@@ -90,7 +90,6 @@ class PaymentDetailsView(OscarPaymentDetailsView):
         self.add_payment_event('auth', total.incl_tax)
 
 
-        raise RedirectRequired(url)
 
     def submit(self, user, basket, shipping_address, shipping_method, shipping_charge, billing_address, order_total, payment_kwargs=None, order_kwargs=None):
         '''
@@ -197,6 +196,21 @@ class ThankYouView(JsonRequestResponseMixin, OscarThankYouView):
     def post(self, request, *args, **kwargs):
 
         print 'post'
+
+        total = 1000
+        reference = 'reference'
+
+        # Payment successful! Record payment source
+        source_type, __ = models.SourceType.objects.get_or_create(
+            name="SomeGateway")
+        source = models.Source(
+            source_type=source_type,
+            amount_allocated=total,
+            reference=reference)
+        self.add_payment_source(source)
+
+        # Record payment event
+        self.add_payment_event('auth', total)
 
         return super(ThankYouView, self).get(self, request, *args, **kwargs)
 

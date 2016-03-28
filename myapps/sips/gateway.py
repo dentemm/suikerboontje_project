@@ -148,7 +148,7 @@ class Gateway(object):
 
 		#return_url = 'http://127.0.0.1:8000/checkout/thank-you/'
 		#return_url = 'http://127.0.0.1:8000/checkout/sips/place-order/' # DEZE WERKTE!!!
-		return_url = 'http://127.0.0.1:8000/checkout/thank-you/'
+		return_url = 'http://127.0.0.1:8000/checkout/preview/'
 
 
 		amount = '1000'
@@ -160,7 +160,7 @@ class Gateway(object):
 		#normalReturnUrl = return_url
 		normalReturnUrl = return_url
 		orderChannel = 'INTERNET'
-		transactionReference = 'toptim84'
+		transactionReference = 'toptim90'
 		#paymentMeanBrandList = ['VISA', 'MASTERCARD']
 
 		request_dict = {
