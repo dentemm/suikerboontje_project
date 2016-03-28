@@ -1,4 +1,7 @@
-from django.views.generic import RedirectView
+from django.views.generic import RedirectView, View
+
+from oscar.apps.checkout.views import OrderPlacementMixin
+
 
 # Load views dynamically
 #PaymentDetailsView = get_class('checkout.views', 'PaymentDetailsView')
@@ -21,6 +24,39 @@ class SuccessResponseView(PaymentDetailsView):
 	template_name_preview = 'sips/preview.html'
 	'''
 
+class ConfirmView(OrderPlacementMixin, View):
+    """
+    Handle the response from GoCardless
+    """
+    def get(self, request, *args, **kwargs):
+
+        print '--------- RETURN ------------'
+
+        try:
+            facade.confirm(request)
+        except PaymentError, e:
+            messages.error(self.request, str(e))
+            self.restore_frozen_basket()
+            return HttpResponseRedirect(reverse('checkout:payment-details'))
+
+        # Fetch submission data out of session
+        order_number = self.checkout_session.get_order_number()
+        basket = self.get_submitted_basket()
+        total_incl_tax, total_excl_tax = self.get_order_totals(basket)
+
+        # Record payment source
+        source_type, is_created = SourceType.objects.get_or_create(name='GoCardless')
+        source = Source(source_type=source_type,
+                        currency='GBP',
+                        amount_allocated=total_incl_tax,
+                        amount_debited=total_incl_tax)
+        self.add_payment_source(source)
+
+        # Place order
+        return self.handle_order_placement(order_number,
+                                           basket,
+                                           total_incl_tax,
+                                           total_excl_tax)
 
 
 

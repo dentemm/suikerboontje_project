@@ -6,6 +6,7 @@ from django import http
 from django.utils.http import urlencode
 
 from oscar.apps.checkout.views import PaymentDetailsView as OscarPaymentDetailsView
+from oscar.apps.checkout.views import OrderPlacementMixin
 from oscar.apps.payment import models
 from oscar.apps.payment.forms import BankcardForm
 from oscar.apps.payment.exceptions import RedirectRequired, PaymentError
@@ -179,3 +180,4 @@ class PaymentDetailsView(OscarPaymentDetailsView):
         # page.  If validating form data and it's invalid, then call the
         # render_payment_details view.
         return self.render_preview(request)
+

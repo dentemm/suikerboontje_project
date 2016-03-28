@@ -10,6 +10,8 @@ from Crypto.Hash import HMAC, SHA256
 
 from django.shortcuts import redirect
 from django.http import HttpResponseRedirect
+from django.core.urlresolvers import reverse
+
 
 
 
@@ -132,15 +134,19 @@ class Gateway(object):
 
 		print '************ gateway: _fetch_response()'
 
+		base_url = 'http://localhost:8000'
+		url_path = reverse('sips-response')
+
+
 		amount = '1000'
 		automaticResponseUrl = 'https://responseurl.com'
 		currencyCode = '978'
 		interfaceVersion = 'IR_WS_2.8'
 		keyVersion = '1'
 		merchantId = SIPS_PAYPAGE_MERCHANT
-		normalReturnUrl = 'https://responseurl2.com'
+		normalReturnUrl = base_url+url_path
 		orderChannel = 'INTERNET'
-		transactionReference = 'toptim55'
+		transactionReference = 'toptim56'
 		#paymentMeanBrandList = ['VISA', 'MASTERCARD']
 
 		request_dict = {
@@ -265,6 +271,3 @@ class Gateway(object):
 		'''
 
 		return self._fetch_response(None)
-
-
-
