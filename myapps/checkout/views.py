@@ -157,11 +157,20 @@ class PaymentDetailsView(OscarPaymentDetailsView):
                 'redirectionData': e.redirectionData
             }
 
+            #print 'payload voor urlencode: ' + str(data)
+
             payload = urlencode(data)
 
+            print 'urlencoded data: ' + str(payload)
+
+            complete_url = '%s?%s' % (e.url, payload)
+
+            print 'complete url: ' + complete_url
             #<input type="hidden", name="redirectionVersion" value=%s
 
-            return http.HttpResponseRedirect(e.url, payload)
+
+            return http.HttpResponseRedirect(complete_url)
+            #return http.HttpResponseRedirect(e.url, payload)
 
 
 
