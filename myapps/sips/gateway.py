@@ -148,7 +148,7 @@ class Gateway(object):
 		merchantId = SIPS_PAYPAGE_MERCHANT
 		normalReturnUrl = 'https://responseurl2.com'
 		orderChannel = 'INTERNET'
-		transactionReference = 'toptim48'
+		transactionReference = 'toptim50'
 		#paymentMeanBrandList = ['VISA', 'MASTERCARD']
 
 		request_dict = {
@@ -181,15 +181,6 @@ class Gateway(object):
 
 		request_dict['seal'] = signature
 
-		#print 'request dict: ' + str(request_dict)
-
-		#json_dict = json.dumps(request_dict).encode('utf-8')
-
-		#print 'json dict: ' + str(json_dict)
-
-		#print 'message: ' + message
-		#print 'secret_key: ' + key
-		#print 'signature: ' + signature
 
 		try:
 			response = requests.post(SIPS_PAYPAGE_URL, json=request_dict)
@@ -288,12 +279,6 @@ class Gateway(object):
 		'''
 		De pre methode wordt gebruikt om betaling onmiddellijk te innen vooraleer order processing plaats vindt
 		'''
-
-#		print '********** gateway methode: pre-auth!'
-#
-#		for key in kwargs:
-#			print key + ': ' + str(kwargs[key])
-
 
 		return self._fetch_response(None)
 

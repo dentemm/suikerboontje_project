@@ -3,6 +3,7 @@ import httplib
 import logging
 
 from django import http
+from django.utils.http import urlencode
 
 from oscar.apps.checkout.views import PaymentDetailsView as OscarPaymentDetailsView
 from oscar.apps.payment import models
@@ -85,7 +86,7 @@ class PaymentDetailsView(OscarPaymentDetailsView):
 
         # vanilla django
 
-        raise PaymentError
+        #raise PaymentError
 
         return http.HttpResponseRedirect(url, redirectionVersion=redirectionVersion, redirectionData=redirectionData)
 
@@ -149,13 +150,22 @@ class PaymentDetailsView(OscarPaymentDetailsView):
 
             logger.info("Order #%s: redirecting to %s", order_number, e.url)
 
+            print 'hier gaat het gebeuren'
+
             data = {
                 'redirectionVersion': e.redirectionVersion,
                 'redirectionData': e.redirectionData
             }
 
+            payload = urlencode(data)
 
-            return http.HttpResponseRedirect(e.url, data)
+            #<input type="hidden", name="redirectionVersion" value=%s
+
+            return http.HttpResponseRedirect(e.url, payload)
+
+
+
+            #return http.HttpResponseRedirect(e.url, redirectionVersion=e.redirectionVersion, redirectionData=e.redirectionData)
 
 
 
