@@ -1,6 +1,6 @@
 from django.views.generic import RedirectView, View
 
-from oscar.apps.checkout.views import OrderPlacementMixin
+from oscar.apps.checkout.views import OrderPlacementMixin, PaymentDetailsView
 
 
 # Load views dynamically
@@ -20,22 +20,28 @@ class SipsRedirectView(RedirectView):
 
 
 class SuccessResponseView(PaymentDetailsView):
+	'''
+	Handle response from Sips
+	'''
 
 	template_name_preview = 'sips/preview.html'
 
 	def post(self, request, *args, **kwargs):
 
-		pass
+		print ' ------------------ RETURN GET -------------'
 
 	def get(self, request, *args, **kwargs):
 
-		pass
+		print '---------RETURN POST ---------'
 	
 
 class ConfirmView(OrderPlacementMixin, View):
     """
     Handle the response from GoCardless
     """
+
+    template_name = 'test.html'
+
     def get(self, request, *args, **kwargs):
 
         print '--------- RETURN get ------------'

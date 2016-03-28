@@ -13,8 +13,6 @@ from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 
 
-
-
 from oscar.apps.payment.exceptions import GatewayError
 
 
@@ -134,21 +132,22 @@ class Gateway(object):
 
 		print '************ gateway: _fetch_response()'
 
-		base_url = 'http://localhost:8000'
+		base_url = 'http://127.0.0.1:8000'
 		url_path = reverse('sips-response')
 
 		return_url = 'http://127.0.0.1:8000/checkout/thank-you/'
 
 
 		amount = '1000'
-		automaticResponseUrl = 'https://responseurl.com'
+		automaticResponseUrl = base_url + url_path
 		currencyCode = '978'
 		interfaceVersion = 'IR_WS_2.8'
 		keyVersion = '1'
 		merchantId = SIPS_PAYPAGE_MERCHANT
-		normalReturnUrl = return_url
+		#normalReturnUrl = return_url
+		normalReturnUrl = base_url + url_path
 		orderChannel = 'INTERNET'
-		transactionReference = 'toptim60'
+		transactionReference = 'toptim65'
 		#paymentMeanBrandList = ['VISA', 'MASTERCARD']
 
 		request_dict = {

@@ -132,7 +132,6 @@ class PaymentDetailsView(OscarPaymentDetailsView):
         In dit geval is het form dat we nodig hebben het BankcardForm uit de payment app
         '''
 
-        print '^^^^^^^^^ handle_payment_details_submission ^^^^^^^^^'
 
         #bankcard_form = BankcardForm(request.POST)
 
@@ -151,6 +150,13 @@ class PaymentDetailsView(OscarPaymentDetailsView):
         # page.  If validating form data and it's invalid, then call the
         # render_payment_details view.
         return self.render_preview(request)
+
+
+    def post(self, request, *args, **kwargs):
+
+        print '-------zou het ?????? ---------'
+
+        return super(PaymentDetailsView, self).post(request, *args, **kwargs)
 
 class SuccessResponseMixin(OscarPaymentDetailsView):
 
