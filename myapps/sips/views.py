@@ -21,7 +21,7 @@ class SipsRedirectView(RedirectView):
 		pass
 
 
-class SuccessResponseView(JsonRequestResponseMixin, View):
+class SuccessResponseView(JsonRequestResponseMixin, PaymentDetailsView):
 	'''
 	Handle response from Sips
 	'''
@@ -36,7 +36,7 @@ class SuccessResponseView(JsonRequestResponseMixin, View):
 
 		print 'return data: ' + str(request.POST.get('Data', 'default'))
 
-		return None
+		return super(SuccessResponseView, self).post(request, *args, **kwargs)
 
 	def get(self, request, *args, **kwargs):
 

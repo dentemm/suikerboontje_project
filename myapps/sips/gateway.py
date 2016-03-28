@@ -147,7 +147,8 @@ class Gateway(object):
 		url_path = reverse('sips-place-order')
 
 		#return_url = 'http://127.0.0.1:8000/checkout/thank-you/'
-		return_url = 'http://127.0.0.1:8000/checkout/sips/place-order/'
+		#return_url = 'http://127.0.0.1:8000/checkout/sips/place-order/' # DEZE WERKTE!!!
+		return_url = 'http://127.0.0.1:8000/checkout/thank-you/'
 
 
 		amount = '1000'
@@ -159,7 +160,7 @@ class Gateway(object):
 		#normalReturnUrl = return_url
 		normalReturnUrl = return_url
 		orderChannel = 'INTERNET'
-		transactionReference = 'toptim76'
+		transactionReference = 'toptim84'
 		#paymentMeanBrandList = ['VISA', 'MASTERCARD']
 
 		request_dict = {

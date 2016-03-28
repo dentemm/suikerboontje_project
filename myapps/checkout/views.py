@@ -3,10 +3,13 @@ import httplib
 import logging
 
 from django import http
+from django.views.decorators.csrf import csrf_exempt
 from django.utils.http import urlencode
+from django.utils.decorators import method_decorator
 
 from oscar.apps.checkout.views import PaymentDetailsView as OscarPaymentDetailsView
 from oscar.apps.checkout.views import OrderPlacementMixin
+from oscar.apps.checkout.views import ThankYouView as OscarThankYouView
 from oscar.apps.payment import models
 from oscar.apps.payment.forms import BankcardForm
 from oscar.apps.payment.exceptions import RedirectRequired, PaymentError
@@ -35,6 +38,10 @@ class PaymentDetailsView(OscarPaymentDetailsView):
     De submit() methode 
     De handle_payment() methode update django-oscar met de nodige gegevens na betaling
     '''
+
+    @method_decorator(csrf_exempt)
+    def dispatch(self, request, *args, **kwargs):
+        return super(PaymentDetailsView, self).dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         '''
@@ -177,4 +184,26 @@ class SuccessResponseView(JsonRequestResponseMixin, OscarPaymentDetailsView):
         except KeyError:
 
             print 'shiiiiiiiiiiiiiiiiiit!'
+
+class ThankYouView(JsonRequestResponseMixin, OscarThankYouView):
+
+    @method_decorator(csrf_exempt)
+    def dispatch(self, request, *args, **kwargs):
+
+        print 'mythankyouview'
+
+        return super(ThankYouView, self).dispatch(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+
+        print 'post'
+
+        return super(ThankYouView, self).get(self, request, *args, **kwargs)
+
+    def get(self, request, *args, **kwargs):
+
+        print 'get'
+
+        return super(ThankYouView, self).get(self, request, *args, **kwargs)
+
 
