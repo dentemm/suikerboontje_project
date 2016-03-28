@@ -17,15 +17,13 @@ from myapps.sips.facade import Facade
 
 logger = logging.getLogger('oscar.checkout')
 
-class CustomException(RedirectRequired):
+class SipsRedirectRequired(RedirectRequired):
 
     def __init__(self, url, version, data):
 
         self.url = url
         self.redirectionVersion = version
         self.redirectionData = data
-
-
 
 
 class PaymentDetailsView(OscarPaymentDetailsView):
@@ -35,9 +33,6 @@ class PaymentDetailsView(OscarPaymentDetailsView):
     De submit() methode 
     De handle_payment() methode update django-oscar met de nodige gegevens na betaling
     '''
-
-    print '-----------tim PaymentDetailsView----------'
-
 
     def get_context_data(self, **kwargs):
         '''
@@ -55,18 +50,9 @@ class PaymentDetailsView(OscarPaymentDetailsView):
         Deze methode is verantwoordelijk voor payment processing 
         ''' 
 
-        print '********' + 'handle_payment' + '*************'
-        print 'order nummer: ' + str(order_number) + ' -- bedrag: ' + str(total.incl_tax)
-
-        for (key, value) in kwargs:
-            print key + ': ' + value
-
-        print '++ einde ++'
-
         facade = Facade()
 
-        print 'facade aangemaakt?'
-
+        # Gateway initiates payment with Sips Connector  which returns url + submit data
         url, redirectionVersion, redirectionData = facade.pre_authorise(order_number, total.incl_tax)
 
         data = {
@@ -74,14 +60,10 @@ class PaymentDetailsView(OscarPaymentDetailsView):
             'redirectionData': redirectionData
         }
 
-        print 'DATATA %s - %s - %s' % (url, redirectionVersion, redirectionData)
-
         logger.info("Order: redirecting to %s", url)
 
-
-        print 'logger executed!!'
-
-        raise CustomException(url, redirectionVersion, redirectionData)
+        # 
+        raise SipsRedirectRequired(url, redirectionVersion, redirectionData)
 
 
         # vanilla django
@@ -133,50 +115,34 @@ class PaymentDetailsView(OscarPaymentDetailsView):
 
     def submit(self, user, basket, shipping_address, shipping_method, shipping_charge, billing_address, order_total, payment_kwargs=None, order_kwargs=None):
         '''
-        Deze methode dient blijkbaar niet overschreven te worden en wordt opgeroepen vooraleer handle_payment() wordt opgeroepen
+        Deze methode roept handle_payment() op, en verwerkt eventuele fouten die handle_payment() retourneert
         '''
 
-        print '))))))) submit() methode (((((((('
-
+        # generator is responsible for generating basket id, this will be used for order processing
         generator = OrderNumberGenerator()
-
         order_number = generator.order_number(basket)
 
 
         try:
             self.handle_payment(order_number, order_total, **payment_kwargs)
 
-        except CustomException as e:
+        except SipsRedirectRequired as e:
 
             logger.info("Order #%s: redirecting to %s", order_number, e.url)
-
-            print 'hier gaat het gebeuren'
 
             data = {
                 'redirectionVersion': e.redirectionVersion,
                 'redirectionData': e.redirectionData
             }
 
-            #print 'payload voor urlencode: ' + str(data)
-
+            # urlencode retourneert url parameters
             payload = urlencode(data)
 
-            print 'urlencoded data: ' + str(payload)
-
+            # volledige url bestaat uit base url + urlencoded parameters
             complete_url = '%s?%s' % (e.url, payload)
-
-            print 'complete url: ' + complete_url
-            #<input type="hidden", name="redirectionVersion" value=%s
 
 
             return http.HttpResponseRedirect(complete_url)
-            #return http.HttpResponseRedirect(e.url, payload)
-
-
-
-            #return http.HttpResponseRedirect(e.url, redirectionVersion=e.redirectionVersion, redirectionData=e.redirectionData)
-
-
 
         return super(PaymentDetailsView, self).submit(user,basket, shipping_address, shipping_method,shipping_charge,billing_address,order_total,payment_kwargs,order_kwargs)
 

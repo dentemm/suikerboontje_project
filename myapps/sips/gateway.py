@@ -12,14 +12,6 @@ from django.shortcuts import redirect
 from django.http import HttpResponseRedirect
 
 
-'''
-message = bytes('field_values').encode('utf-8')
-secret = bytes('secret').encode('utf-8')
-
-seal = base64.b64encode(hmac.new(secret, message, digestmod=hashlib.sha256).digest())
-
-bron: http://www.jokecamp.com/blog/examples-of-creating-base64-hashes-using-hmac-sha256-in-different-languages/#python
-'''
 
 from oscar.apps.payment.exceptions import GatewayError
 
@@ -148,7 +140,7 @@ class Gateway(object):
 		merchantId = SIPS_PAYPAGE_MERCHANT
 		normalReturnUrl = 'https://responseurl2.com'
 		orderChannel = 'INTERNET'
-		transactionReference = 'toptim54'
+		transactionReference = 'toptim55'
 		#paymentMeanBrandList = ['VISA', 'MASTERCARD']
 
 		request_dict = {
@@ -188,8 +180,6 @@ class Gateway(object):
 		except ConnectionError:
 			print 'godver'
 
-		print 'requests: ' + str(response.status_code)
-		print 'request reponse: ' + str(response.json())
 
 		json_response = response.json()
 
@@ -197,19 +187,13 @@ class Gateway(object):
 		if json_response['redirectionStatusCode'] == '00':
 
 			print '--------SIPS CONNECTOR: SUCCESS'
-			print 'url: ' + json_response['redirectionUrl']
 
 			url = str(json_response['redirectionUrl'])
 			redirectionVersion = str(json_response['redirectionVersion'])
 			redirectionData = str(json_response['redirectionData'])
 
-			print 'url verwerkt: ' + url
-			print redirectionVersion
-			print redirectionData
 
 			return url, redirectionVersion, redirectionData
-
-			print 'echt?????'
 
 
 
