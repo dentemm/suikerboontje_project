@@ -20,6 +20,7 @@ SIPS_PAYPAGE_TEST_HOST = 'payment-webinit.simu.sips-atos.com'
 SIPS_PAYPAGE_LIVE_HOST = 'payment-webinit.sips-atos.com'
 SIPS_PAYPAGE_PATH = '/rs-services/v2/paymentInit/'
 SIPS_PAYPAGE_URL = 'https://payment-webinit.simu.sips-atos.com/rs-services/v2/paymentInit/'
+SIPS_PAYPAGE_URL_PRODUCTION = 'https://payment-webinit.sips-atos.com/rs-services/v2/paymentInit/'
 SIPS_PAYPAGE_SECRET_KEY = '002001000000001_KEY1'
 SIPS_PAYPAGE_MERCHANT = '002001000000001'
 
@@ -156,11 +157,12 @@ class Gateway(object):
 		currencyCode = '978'
 		interfaceVersion = 'IR_WS_2.8'
 		keyVersion = '1'
-		merchantId = SIPS_PAYPAGE_MERCHANT
+		#merchantId = SIPS_PAYPAGE_MERCHANT
+		merchantId = '225005017980001'
 		#normalReturnUrl = return_url
 		normalReturnUrl = return_url
 		orderChannel = 'INTERNET'
-		transactionReference = 'toptim90'
+		transactionReference = 'toptim92'
 		#paymentMeanBrandList = ['VISA', 'MASTERCARD']
 
 		request_dict = {
@@ -189,15 +191,18 @@ class Gateway(object):
 				concat_string += str(request_dict[key])
 
 
+		SIPS_PAYPAGE_SECRET_KEY = '8TZkvnUF7pS6LjMNRNp5qzCVk2UKP8R6NHFmyuFPIhk'
+
 		signature = self._calculate_seal(concat_string, SIPS_PAYPAGE_SECRET_KEY)
 
 		request_dict['seal'] = signature
 
 
 		try:
-			response = requests.post(SIPS_PAYPAGE_URL, json=request_dict)
+			#response = requests.post(SIPS_PAYPAGE_URL, json=request_dict)
+			response = requests.post(SIPS_PAYPAGE_URL_PRODUCTION, json=request_dict)
 
-		except ConnectionError:
+		except requests.ConnectionError:
 			print 'godver'
 
 
@@ -219,6 +224,8 @@ class Gateway(object):
 
 		else:
 			print '--------SIPS CONNECTOR: FAILURE'
+
+			print 'error: ' + str(json_response['redirectionStatusCode'])
 
 
 		return response.json()
