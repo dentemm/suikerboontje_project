@@ -20,7 +20,7 @@ SIPS_PAYMENT_MEAN_TYPE = 'CARD'
 
 class Facade(object):
 	'''
-	De brug tussen Django Oscar en het Gateway object
+	De brug tussen Django Oscar en de Payment Gateway
 	'''
 
 	def __init__(self):
@@ -53,21 +53,36 @@ class Facade(object):
 
 
 	def pre_authorise(self, order_number, amount, txn_ref='test', billing_address=None, currency='EUR'):
+		'''
+		Deze methode roept de gateway aan, en heeft tot doel een voorafbetaling van de gebruiker te verkrijgen
+		'''
 
 		print '************** Facade: pre_authorise methode'
 
-		print amount
-		print currency
-		print SIPS_MERCHANT
+		#print amount
+		#print currency
+		#print SIPS_MERCHANT
 
-		url, redirectionVersion, redirectionData = self.gateway.pre(
-				amount=amount,
-				currency=currency,
-				merchantId=SIPS_MERCHANT
-			)
+		# roep de pre() methode van de gateway aan, deze retourneert 
 
-		print 'facade -- response: ' + str(url)
+		try:
+			url, redirectionVersion, redirectionData = self.gateway.pre(
+					amount=amount,
+					currency=currency,
+					merchantId=SIPS_MERCHANT
+				)
 
-		return url, redirectionVersion, redirectionData
+			return url, redirectionVersion, redirectionData
+
+		except ValueError:
+
+			print 'Er deed zich een value error voor!!!'
+
+			
+
+
+		#print 'facade -- response: ' + str(url)
+
+		#return url, redirectionVersion, redirectionData
 
 

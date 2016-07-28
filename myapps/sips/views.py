@@ -26,7 +26,7 @@ class SuccessResponseView(JsonRequestResponseMixin, PaymentDetailsView):
 	Handle response from Sips
 	'''
 
-	print '--------success response view --------------'
+	print '-----l--success response view --------l-----'
 
 	template_name_preview = 'sips/sips.html'
 

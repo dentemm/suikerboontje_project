@@ -12,7 +12,9 @@ from django.shortcuts import redirect
 from django.core.urlresolvers import reverse
 
 
-from oscar.apps.payment.exceptions import GatewayError
+from oscar.apps.payment.exceptions import GatewayError, UnableToTakePayment
+
+#from oscar.apps.payment.exceptions import RedirectRequired, PaymentError, UnableToTakePayment
 
 
 # SIPS JSON PAYPAGE
@@ -47,8 +49,9 @@ SIPS_OFFICE_INTERFACE_VERSION = 'IR_WS_2.11'
 
 
 
+
 # Response status codes
-SUCCESS, MERCHANT_INVALID, TRANSACTION_INVALID, REQUEST_INVALID, SECURITY_ERROR = '00', '03', '12', '30', '34'
+SUCCESS, MERCHANT_INVALID, TRANSACTION_INVALID, REQUEST_INVALID, SECURITY_ERROR, DUPLICATE_TRANSACTOIN = '00', '03', '12', '30', '34', '94'
 
 
 def post(url, params):
@@ -142,8 +145,6 @@ class Gateway(object):
 		execute request
 		'''
 
-		print '************ gateway: _fetch_response()'
-
 		base_url = 'http://127.0.0.1:8000'
 		url_path = reverse('sips-place-order')
 
@@ -157,12 +158,12 @@ class Gateway(object):
 		currencyCode = '978'
 		interfaceVersion = 'IR_WS_2.8'
 		keyVersion = '1'
-		#merchantId = SIPS_PAYPAGE_MERCHANT
-		merchantId = '225005017980001'
+		merchantId = SIPS_PAYPAGE_MERCHANT	# TEST PAGE
+		#merchantId = '225005017980001'		# LIVE PAGE
 		#normalReturnUrl = return_url
 		normalReturnUrl = return_url
 		orderChannel = 'INTERNET'
-		transactionReference = 'toptim92'
+		transactionReference = 'toptim104'
 		#paymentMeanBrandList = ['VISA', 'MASTERCARD']
 
 		request_dict = {
@@ -191,16 +192,18 @@ class Gateway(object):
 				concat_string += str(request_dict[key])
 
 
-		SIPS_PAYPAGE_SECRET_KEY = '8TZkvnUF7pS6LjMNRNp5qzCVk2UKP8R6NHFmyuFPIhk'
+		SIPS_PAYPAGE_SECRET_KEY = '8TZkvnUF7pS6LjMNRNp5qzCVk2UKP8R6NHFmyuFPIhk'		# LIVE HOST
+		SIPS_PAYPAGE_SECRET_KEY = '002001000000001_KEY1'							# TEST HOST
 
+		# Bereken de secret key voor de huidige gegevens
 		signature = self._calculate_seal(concat_string, SIPS_PAYPAGE_SECRET_KEY)
 
 		request_dict['seal'] = signature
 
 
 		try:
-			#response = requests.post(SIPS_PAYPAGE_URL, json=request_dict)
-			response = requests.post(SIPS_PAYPAGE_URL_PRODUCTION, json=request_dict)
+			response = requests.post(SIPS_PAYPAGE_URL, json=request_dict)				# TEST PAGE
+			#response = requests.post(SIPS_PAYPAGE_URL_PRODUCTION, json=request_dict)	# LIVE PAGE
 
 		except requests.ConnectionError:
 			print 'godver'
@@ -221,14 +224,18 @@ class Gateway(object):
 			return url, redirectionVersion, redirectionData
 
 
-
 		else:
 			print '--------SIPS CONNECTOR: FAILURE'
 
 			print 'error: ' + str(json_response['redirectionStatusCode'])
+			print 'volledige error response: ' + str(json_response)
+
+			raise UnableToTakePayment(str(json_response))
+
+			#return 'http://127.0.0.1:8000/checkout/preview/', None, None, json_response['redirectionStatusCode']
 
 
-		return response.json()
+		#return response.json()
 
 
 
@@ -275,20 +282,11 @@ class Gateway(object):
 			if key == 'amount' and value == 0:
 				raise ValueError('Een betaling kan niet 0 zijn')
 
-	def _setup_request(self, method, **kwargs):
-
-		amount = kwargs.get('amount', '')
-		merchant_id = kwargs.get('merchantId', '')
-
-
-
-	def build_json_request(self, **kwargs):
-		pass 
-
 
 	def pre(self, **kwargs):
 		'''
-		De pre methode wordt gebruikt om betaling onmiddellijk te innen vooraleer order processing plaats vindt
+		De pre methode wordt gebruikt om betaling onmiddellijk te innen vooraleer order processing plaats vindt. 
+		Het is deze methode die door de Facade wordt opgeroepen
 		'''
 
 		return self._fetch_response(None)
