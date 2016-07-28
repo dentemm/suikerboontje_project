@@ -68,13 +68,31 @@ class PaymentDetailsView(OscarPaymentDetailsView):
 
         facade = Facade()
 
+        url, redirectionVersion, redirectionData = facade.pre_authorise(order_number, total.incl_tax)
+
+        source_type, __ = models.SourceType.objects.get_or_create(
+                    name="Sips")
+        source = models.Source(
+            source_type=source_type,
+            amount_allocated=total.incl_tax,
+            reference=reference)
+            #reference=order_number)
+        self.add_payment_source(source)
+
+        # Record payment event
+        self.add_payment_event('auth', total.incl_tax)
+
+
+
         # Gateway initiates payment with Sips Connector  which returns url + submit data
 
-        try:
+        '''try:
             url, redirectionVersion, redirectionData = facade.pre_authorise(order_number, total.incl_tax)
+
             raise SipsRedirectRequired(url, redirectionVersion, redirectionData)
 
         except UnableToTakePayment as e:
+            # Er heeft zich een fout voorgedaan bij SIPS authorisatie
 
             print 'unable to take payment'
 
@@ -87,7 +105,7 @@ class PaymentDetailsView(OscarPaymentDetailsView):
             url = reverse('dashboard:order-detail', kwargs={'number': order_number})
             response = http.HttpResponseRedirect(url)
 
-            return response
+            return response'''
 
 
             #return self.render_payment_details(self.request, error=msg)
@@ -125,7 +143,7 @@ class PaymentDetailsView(OscarPaymentDetailsView):
 
 
 
-    def submit(self, user, basket, shipping_address, shipping_method, shipping_charge, billing_address, order_total, payment_kwargs=None, order_kwargs=None):
+    def submiiit(self, user, basket, shipping_address, shipping_method, shipping_charge, billing_address, order_total, payment_kwargs=None, order_kwargs=None):
         '''
         Deze methode roept handle_payment() op, en verwerkt eventuele fouten die handle_payment() retourneert
         '''

@@ -10,6 +10,7 @@ from Crypto.Hash import HMAC, SHA256
 
 from django.shortcuts import redirect
 from django.core.urlresolvers import reverse
+from django.utils.safestring import mark_safe
 
 
 from oscar.apps.payment.exceptions import GatewayError, UnableToTakePayment
@@ -230,7 +231,10 @@ class Gateway(object):
 			print 'error: ' + str(json_response['redirectionStatusCode'])
 			print 'volledige error response: ' + str(json_response)
 
-			raise UnableToTakePayment(str(json_response))
+			if str(json_response['redirectionStatusCode']) == '94':
+
+				raise UnableToTakePayment(mark_safe('Er werd reeds een transactie uitgevoerd met deze referentie. ' + \
+					'Een duplicaat transactie wordt omwille van veiligheidsredenen niet toegelaten!'))
 
 			#return 'http://127.0.0.1:8000/checkout/preview/', None, None, json_response['redirectionStatusCode']
 
