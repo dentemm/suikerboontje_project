@@ -72,8 +72,31 @@ class PaymentDetailsView(OscarPaymentDetailsView):
 
         facade = Facade()
 
-        url, redirectionVersion, redirectionData = facade.pre_authorise(order_number, total.incl_tax)
+        #url = facade.pre_authorise(order_number, total.incl_tax)
+        #raise RedirectRequired(url)
 
+        url, redirectionVersion, redirectionData = facade.pre_authorise(order_number, total.incl_tax)
+        raise SipsRedirectRequired(url, redirectionVersion, redirectionData)
+
+        '''try:
+            url = facade.pre_authorise(order_number, total.incl_tax)
+            #url, redirectionVersion, redirectionData = facade.pre_authorise(order_number, total.incl_tax)
+
+            raise RedirectRequired(url)
+            #raise SipsRedirectRequired(url, redirectionVersion, redirectionData)
+
+        except:
+
+            print 'toch ergens iets misgelopen ... '
+            '''
+
+        print 'succesvol geretourneerd! -- terug in handle_payment() methode'
+
+        logger.info("Order: redirecting to %s", url)
+
+        print 'logging completed'
+
+        
         source_type, __ = models.SourceType.objects.get_or_create(
                     name="Sips")
         source = models.Source(
@@ -85,6 +108,8 @@ class PaymentDetailsView(OscarPaymentDetailsView):
 
         # Record payment event
         self.add_payment_event('auth', total.incl_tax)
+
+
 
 
 
@@ -118,10 +143,7 @@ class PaymentDetailsView(OscarPaymentDetailsView):
             #raise SipsRedirectRequired('/', None, None)
 
 
-        '''data = {
-            'redirectionVersion': redirectionVersion,
-            'redirectionData': redirectionData
-        }'''
+
 
         #logger.info("Order: redirecting to %s", url)
 
@@ -208,6 +230,23 @@ class PaymentDetailsView(OscarPaymentDetailsView):
         try:
             self.handle_payment(order_number, order_total, **payment_kwargs)
 
+        except SipsRedirectRequired as e:
+
+            logger.info("Order #%s: redirecting to %s", order_number, e.url)
+
+            data = {
+                'redirectionVersion': e.redirectionVersion,
+                'redirectionData': e.redirectionData
+            }
+
+            # urlencode retourneert url parameters
+            payload = urlencode(data)
+
+            # volledige url bestaat uit base url + urlencoded parameters
+            complete_url = '%s?%s' % (e.url, payload)
+
+            return http.HttpResponseRedirect(complete_url)
+
         except RedirectRequired as e:
             # Redirect required (eg PayPal, 3DS)
             logger.info("Order #%s: redirecting to %s", order_number, e.url)
@@ -269,6 +308,8 @@ class PaymentDetailsView(OscarPaymentDetailsView):
 
             return self.render_preview(
                     self.request, error=error_msg, **payment_kwargs)
+
+        print 'going to log now .......'
 
         signals.post_payment.send_robust(sender=self, view=self)
 

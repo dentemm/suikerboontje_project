@@ -72,60 +72,6 @@ def post(url, params):
 	reponse = requests.post(url, payload, headers={'content-type': 'text/namevalue, charset=utf-8'})
 
 
-
-
-class SipsRequest(object):
-	'''
-	Voorstelling van een SIPS request
-	Een SIPS request is een POST naar 
-
-	TESTING details:
-	POST URL: 				https://payment-webinit.simu.sips-atos.com/rs-services/v2/paymentInit/
-	SECRET KEY: 			002001000000001_KEY1
-
-	merchantId:				002001000000001
-	keyVersion:				1
-
-	+ aanbeveling: stel transactionReference in
-	transactionReference:	suikerboon_<some_ref> 
-
-	'''
-
-	def __init__(self, sips_url, merchantId='002001000000001', keyVersion='1', orderChannel='INTERNET', interfaceVersion='???', paymentMeanBrand='BCMC', paymentMeanType='CARD'):
-		
-		self._sips_url = sips_url
-		self._merchantId = merchantId
-		self._keyVersion = keyVersion
-		self._orderChannel = orderChannel
-		self._interfaceVersion = interfaceVersion
-		self._paymentMeanBrand = paymentMeanBrand
-		self._paymentMeanType = paymentMeanType
-
-
-
-class SipsResponse(object):
-	'''
-	Voorstelling van een SIPS response
-	Een SIPS response is een POST aan de automaticResponseUrl of manualResponseUrl (afhankelijk van de situatie)
-	Er zijn 4 velden beschikbaar in het response:
-	- Data (concatentation of response fields)
-	- Ecode (gebruikte encoding)
-	- Seal (Message signature)
-	- interfaceVersion 
-	'''
-
-	def __init__(self, json_request, json_response):
-
-		self.json_request = json_request
-		self.json_response = json_response
-		self.data = self._extract_data(json_response)
-
-	def _extract_data(self, json_response):
-
-		pass
-
-
-
 class Gateway(object):
 
 	def __init__(self, sips_url, merchantId='002001000000001', keyVersion='1', orderChannel='INTERNET', interfaceVersion='IR_WS_2.10', paymentMeanBrand='BCMC', paymentMeanType='CARD'):
@@ -139,19 +85,13 @@ class Gateway(object):
 		self._paymentMeanType = paymentMeanType
 
 
-	def _initization_request(self, json_request):
-		'''
-		Deze methode voert het initialization request uit naar de SIPS connector URL, en ontvangt een response object 
-		'''
-
-		connection = httplib.HTTPSConnection(SIPS_PAYPAGE_TEST_HOST)
-		headers = {'Content-type': 'application/json', 'Accept': 'application/json'}
-		connection.request('POST', SIPS_PAYPAGE_PATH)
-
-	def _fetch_response(self, json_request):
+	def _fetch_response(self, **kwargs):
 		'''
 		execute request
 		'''
+
+		print '_fetch_response()'
+		print kwargs
 
 		base_url = 'http://127.0.0.1:8000'
 		url_path = reverse('sips-place-order')
@@ -166,11 +106,12 @@ class Gateway(object):
 		currencyCode = '978'
 		interfaceVersion = 'IR_WS_2.8'
 		keyVersion = '1'
-		#merchantId = SIPS_PAYPAGE_MERCHANT	# TEST PAGE
-		merchantId = '225005017980001'		# LIVE PAGE
+		merchantId = SIPS_PAYPAGE_MERCHANT	# TEST PAGE
+		#merchantId = '225005017980001'		# LIVE PAGE
 		normalReturnUrl = return_url
 		orderChannel = 'INTERNET'
-		transactionReference = 'toptim105'
+		transactionReference = kwargs['order_number']
+		transactionReference = 'again13'
 		#paymentMeanBrandList = ['VISA', 'MASTERCARD']
 
 		request_dict = {
@@ -199,18 +140,17 @@ class Gateway(object):
 				concat_string += str(request_dict[key])
 
 
-		SIPS_PAYPAGE_SECRET_KEY = '8TZkvnUF7pS6LjMNRNp5qzCVk2UKP8R6NHFmyuFPIhk'		# LIVE HOST
-		#SIPS_PAYPAGE_SECRET_KEY = '002001000000001_KEY1'							# TEST HOST
+		#SIPS_PAYPAGE_SECRET_KEY = '8TZkvnUF7pS6LjMNRNp5qzCVk2UKP8R6NHFmyuFPIhk'		# LIVE HOST
+		SIPS_PAYPAGE_SECRET_KEY = '002001000000001_KEY1'							# TEST HOST
 
 		# Bereken de secret key voor de huidige gegevens
 		signature = self._calculate_seal(concat_string, SIPS_PAYPAGE_SECRET_KEY)
 
 		request_dict['seal'] = signature
 
-
 		try:
-			#response = requests.post(SIPS_PAYPAGE_URL, json=request_dict)				# TEST PAGE
-			response = requests.post(SIPS_PAYPAGE_URL_PRODUCTION, json=request_dict)	# LIVE PAGE
+			response = requests.post(SIPS_PAYPAGE_URL, json=request_dict)				# TEST PAGE
+			#response = requests.post(SIPS_PAYPAGE_URL_PRODUCTION, json=request_dict)	# LIVE PAGE
 
 		except requests.ConnectionError:
 			print 'godver'
@@ -222,12 +162,17 @@ class Gateway(object):
 		if json_response['redirectionStatusCode'] == '00':
 
 			print '--------SIPS CONNECTOR: SUCCESS'
+			print str(json_response)
 
 			url = str(json_response['redirectionUrl'])
 			redirectionVersion = str(json_response['redirectionVersion'])
 			redirectionData = str(json_response['redirectionData'])
 
+			print url
+			print redirectionVersion
+			print redirectionData
 
+			#return url
 			return url, redirectionVersion, redirectionData
 
 
@@ -300,4 +245,6 @@ class Gateway(object):
 		Het is deze methode die door de Facade wordt opgeroepen
 		'''
 
-		return self._fetch_response(None)
+		print 'gateway pre() methode'
+
+		return self._fetch_response(**kwargs)
