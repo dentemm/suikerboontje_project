@@ -12,8 +12,7 @@ from django.shortcuts import redirect
 from django.core.urlresolvers import reverse
 from django.utils.safestring import mark_safe
 
-
-from oscar.apps.payment.exceptions import GatewayError, UnableToTakePayment
+from oscar.apps.payment.exceptions import GatewayError, UnableToTakePayment, PaymentError
 
 #from oscar.apps.payment.exceptions import RedirectRequired, PaymentError, UnableToTakePayment
 
@@ -49,10 +48,18 @@ SIPS_EXPIRY_DATE = '201609'
 SIPS_OFFICE_INTERFACE_VERSION = 'IR_WS_2.11'
 
 
-
-
 # Response status codes
 SUCCESS, MERCHANT_INVALID, TRANSACTION_INVALID, REQUEST_INVALID, SECURITY_ERROR, DUPLICATE_TRANSACTOIN = '00', '03', '12', '30', '34', '94'
+
+
+class SipsPaymentError(PaymentError):
+    '''
+    Custom subklasse vn Oscar's PaymentError
+    '''
+
+    def __init__(self, error_msg):
+
+        self.error_msg = error_msg
 
 
 def post(url, params):
@@ -159,12 +166,11 @@ class Gateway(object):
 		currencyCode = '978'
 		interfaceVersion = 'IR_WS_2.8'
 		keyVersion = '1'
-		merchantId = SIPS_PAYPAGE_MERCHANT	# TEST PAGE
-		#merchantId = '225005017980001'		# LIVE PAGE
-		#normalReturnUrl = return_url
+		#merchantId = SIPS_PAYPAGE_MERCHANT	# TEST PAGE
+		merchantId = '225005017980001'		# LIVE PAGE
 		normalReturnUrl = return_url
 		orderChannel = 'INTERNET'
-		transactionReference = 'toptim104'
+		transactionReference = 'toptim105'
 		#paymentMeanBrandList = ['VISA', 'MASTERCARD']
 
 		request_dict = {
@@ -194,7 +200,7 @@ class Gateway(object):
 
 
 		SIPS_PAYPAGE_SECRET_KEY = '8TZkvnUF7pS6LjMNRNp5qzCVk2UKP8R6NHFmyuFPIhk'		# LIVE HOST
-		SIPS_PAYPAGE_SECRET_KEY = '002001000000001_KEY1'							# TEST HOST
+		#SIPS_PAYPAGE_SECRET_KEY = '002001000000001_KEY1'							# TEST HOST
 
 		# Bereken de secret key voor de huidige gegevens
 		signature = self._calculate_seal(concat_string, SIPS_PAYPAGE_SECRET_KEY)
@@ -203,8 +209,8 @@ class Gateway(object):
 
 
 		try:
-			response = requests.post(SIPS_PAYPAGE_URL, json=request_dict)				# TEST PAGE
-			#response = requests.post(SIPS_PAYPAGE_URL_PRODUCTION, json=request_dict)	# LIVE PAGE
+			#response = requests.post(SIPS_PAYPAGE_URL, json=request_dict)				# TEST PAGE
+			response = requests.post(SIPS_PAYPAGE_URL_PRODUCTION, json=request_dict)	# LIVE PAGE
 
 		except requests.ConnectionError:
 			print 'godver'
@@ -233,7 +239,8 @@ class Gateway(object):
 
 			if str(json_response['redirectionStatusCode']) == '94':
 
-				raise UnableToTakePayment(mark_safe('Er werd reeds een transactie uitgevoerd met deze referentie. ' + \
+
+				raise SipsPaymentError(mark_safe('Er werd reeds een transactie uitgevoerd met deze referentie. ' + \
 					'Een duplicaat transactie wordt omwille van veiligheidsredenen niet toegelaten!'))
 
 			#return 'http://127.0.0.1:8000/checkout/preview/', None, None, json_response['redirectionStatusCode']
