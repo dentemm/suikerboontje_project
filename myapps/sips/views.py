@@ -2,7 +2,7 @@ from django.views.generic import RedirectView, View
 
 from oscar.apps.checkout.views import OrderPlacementMixin, PaymentDetailsView
 
-from braces.views import JsonRequestResponseMixin
+#from braces.views import JsonRequestResponseMixin
 
 
 # Load views dynamically
@@ -21,7 +21,8 @@ class SipsRedirectView(RedirectView):
 		pass
 
 
-class SuccessResponseView(JsonRequestResponseMixin, PaymentDetailsView):
+#class SuccessResponseView(JsonRequestResponseMixin, PaymentDetailsView):
+class SuccessResponseView(PaymentDetailsView):
 	'''
 	Handle response from Sips
 	'''
