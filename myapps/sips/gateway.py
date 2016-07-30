@@ -111,7 +111,7 @@ class Gateway(object):
 		normalReturnUrl = return_url
 		orderChannel = 'INTERNET'
 		transactionReference = kwargs['order_number']
-		transactionReference = 'again13'
+		#transactionReference = 'again13'
 		#paymentMeanBrandList = ['VISA', 'MASTERCARD']
 
 		request_dict = {
