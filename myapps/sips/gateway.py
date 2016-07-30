@@ -106,8 +106,8 @@ class Gateway(object):
 		currencyCode = '978'
 		interfaceVersion = 'IR_WS_2.8'
 		keyVersion = '1'
-		merchantId = SIPS_PAYPAGE_MERCHANT	# TEST PAGE
-		#merchantId = '225005017980001'		# LIVE PAGE
+		#merchantId = SIPS_PAYPAGE_MERCHANT	# TEST PAGE
+		merchantId = '225005017980001'		# LIVE PAGE
 		normalReturnUrl = return_url
 		orderChannel = 'INTERNET'
 		transactionReference = kwargs['order_number']
@@ -140,8 +140,8 @@ class Gateway(object):
 				concat_string += str(request_dict[key])
 
 
-		#SIPS_PAYPAGE_SECRET_KEY = '8TZkvnUF7pS6LjMNRNp5qzCVk2UKP8R6NHFmyuFPIhk'		# LIVE HOST
-		SIPS_PAYPAGE_SECRET_KEY = '002001000000001_KEY1'							# TEST HOST
+		SIPS_PAYPAGE_SECRET_KEY = '8TZkvnUF7pS6LjMNRNp5qzCVk2UKP8R6NHFmyuFPIhk'		# LIVE PAGE
+		#SIPS_PAYPAGE_SECRET_KEY = '002001000000001_KEY1'							# TEST PAGE
 
 		# Bereken de secret key voor de huidige gegevens
 		signature = self._calculate_seal(concat_string, SIPS_PAYPAGE_SECRET_KEY)
@@ -149,8 +149,8 @@ class Gateway(object):
 		request_dict['seal'] = signature
 
 		try:
-			response = requests.post(SIPS_PAYPAGE_URL, json=request_dict)				# TEST PAGE
-			#response = requests.post(SIPS_PAYPAGE_URL_PRODUCTION, json=request_dict)	# LIVE PAGE
+			#response = requests.post(SIPS_PAYPAGE_URL, json=request_dict)				# TEST PAGE
+			response = requests.post(SIPS_PAYPAGE_URL_PRODUCTION, json=request_dict)	# LIVE PAGE
 
 		except requests.ConnectionError:
 			print 'godver'
