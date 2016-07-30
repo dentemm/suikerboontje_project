@@ -3,20 +3,24 @@
 {% load i18n %}
 
 {% block checkout_title %}
-SIPS Payment Gateway
+Worldline SIPS Payment Gateway
 {% endblock %}
 
 {% block payment_details %}
     <div class="well">
         <div class="sub-header">
-            <h3>{% trans "PayPal PayFlow Pro" %}</h3>
+            <h3>{% trans "Informatie over betaling" %}</h3>
         </div>
         <form method="post" action="{% url 'checkout:preview' %}" class="form-stacked">
             {% csrf_token %}
-            <h4>{% trans "Bankcard" %}</h4>
+            <!--<h4>{% trans "Bankcard" %}</h4>
             {% include "partials/form_fields.html" with form=bankcard_form %}
             <h4>{% trans "Billing address" %}</h4>
-            {% include "partials/form_fields.html" with form=billing_address_form %}
+            {% include "partials/form_fields.html" with form=billing_address_form %}-->
+            <p>
+                Betalingen worden uitgevoerd via de beveiligde website van Worldline, de Europese marktleider op het gebied 
+                van online betaal- en transactiediensten. Je kan betalen via je Maestro bankkaart gegevens. 
+            </p>
             <div class="form-actions">
                 <button type="submit" class="btn btn-large btn-primary">{% trans "Continue" %}</button>
             </div>
