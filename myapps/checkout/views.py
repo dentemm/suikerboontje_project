@@ -291,10 +291,10 @@ class PaymentDetailsView(OscarPaymentDetailsView):
 
             return http.HttpResponseRedirect(complete_url)
 
-        except RedirectRequired as e:
+        '''except RedirectRequired as e:
             # Redirect required (eg PayPal, 3DS)
             logger.info("Order #%s: redirecting to %s", order_number, e.url)
-            return http.HttpResponseRedirect(e.url)
+            return http.HttpResponseRedirect(e.url)'''
 
         except UnableToTakePayment as e:
             # Something went wrong with payment but in an anticipated way.  Eg
