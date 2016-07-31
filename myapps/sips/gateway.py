@@ -98,7 +98,8 @@ class Gateway(object):
 
 		#return_url = 'http://127.0.0.1:8000/checkout/thank-you/'
 		#return_url = 'http://127.0.0.1:8000/checkout/sips/place-order/' # DEZE WERKTE!!!
-		return_url = 'http://127.0.0.1:8000/checkout/preview/'
+		return_url = 'http://127.0.0.1:8000/checkout/preview/' # test 
+		return_url = 'http://suikerboon.sites.djangoeurop.com/checkout/preview/' # Host
 
 
 		amount = '1000'
@@ -111,7 +112,7 @@ class Gateway(object):
 		normalReturnUrl = return_url
 		orderChannel = 'INTERNET'
 		transactionReference = kwargs['order_number']
-		#transactionReference = 'again13'
+		#transactionReference = 'again17'
 		#paymentMeanBrandList = ['VISA', 'MASTERCARD']
 
 		request_dict = {

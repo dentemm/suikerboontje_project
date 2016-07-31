@@ -75,8 +75,48 @@ class PaymentDetailsView(OscarPaymentDetailsView):
         #url = facade.pre_authorise(order_number, total.incl_tax)
         #raise RedirectRequired(url)
 
+        
         url, redirectionVersion, redirectionData = facade.pre_authorise(order_number, total.incl_tax)
+
+        print 'succesvol geretourneerd! -- terug in handle_payment() methode'
+
+        logger.info("Order: redirecting to %s", url)
+
+        print 'logging completed'
+
+        
+        source_type, __ = models.SourceType.objects.get_or_create(
+                    name="Sips")
+        source = models.Source(
+            source_type=source_type,
+            amount_allocated=total.incl_tax,
+            #reference=reference)
+            reference=order_number)
+        self.add_payment_source(source)
+
+        # Record payment event
+        self.add_payment_event('auth', total.incl_tax)
+
+
         raise SipsRedirectRequired(url, redirectionVersion, redirectionData)
+
+        '''except Exception as e:
+            # Unhandled exception - hopefully, you will only ever see this in
+            # development...
+            logger.error(
+                    "Order #%s: unhandled exception while taking payment (%s)",
+                    order_number, e, exc_info=True)
+            self.restore_frozen_basket()
+
+            print 'error' + str(e)
+
+            return self.render_preview(
+                    self.request, error=error_msg, **payment_kwargs)
+
+        except:
+
+            print 'exception'
+            '''
 
         '''try:
             url = facade.pre_authorise(order_number, total.incl_tax)
