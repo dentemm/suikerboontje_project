@@ -84,6 +84,8 @@ class PaymentDetailsView(OscarPaymentDetailsView):
 
         print 'logging completed'
 
+        raise SipsRedirectRequired(url, redirectionVersion, redirectionData)
+
         
         source_type, __ = models.SourceType.objects.get_or_create(
                     name="Sips")
@@ -98,7 +100,7 @@ class PaymentDetailsView(OscarPaymentDetailsView):
         self.add_payment_event('auth', total.incl_tax)
 
 
-        raise SipsRedirectRequired(url, redirectionVersion, redirectionData)
+        
 
         '''except Exception as e:
             # Unhandled exception - hopefully, you will only ever see this in
@@ -271,6 +273,8 @@ class PaymentDetailsView(OscarPaymentDetailsView):
             self.handle_payment(order_number, order_total, **payment_kwargs)
 
         except SipsRedirectRequired as e:
+
+            print 'SipsRedirectRequired!'
 
             logger.info("Order #%s: redirecting to %s", order_number, e.url)
 
