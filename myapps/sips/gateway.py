@@ -185,9 +185,12 @@ class Gateway(object):
 
 			if str(json_response['redirectionStatusCode']) == '94':
 
-
 				raise SipsPaymentError(mark_safe('Er werd reeds een transactie uitgevoerd met deze referentie. ' + \
 					'Een duplicaat transactie wordt omwille van veiligheidsredenen niet toegelaten!'))
+
+			else: 
+
+				raise SipsPaymentError(mark_safe('Ander issue'))
 
 			#return 'http://127.0.0.1:8000/checkout/preview/', None, None, json_response['redirectionStatusCode']
 
