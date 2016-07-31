@@ -154,7 +154,9 @@ class Gateway(object):
 			response = requests.post(SIPS_PAYPAGE_URL_PRODUCTION, json=request_dict)	# LIVE PAGE
 
 		except requests.ConnectionError:
+
 			print 'godver'
+			raise SipsPaymentError(mark_safe('Connection Error'))
 
 
 		json_response = response.json()
@@ -187,6 +189,8 @@ class Gateway(object):
 
 				raise SipsPaymentError(mark_safe('Er werd reeds een transactie uitgevoerd met deze referentie. ' + \
 					'Een duplicaat transactie wordt omwille van veiligheidsredenen niet toegelaten!'))
+
+
 
 			else: 
 
