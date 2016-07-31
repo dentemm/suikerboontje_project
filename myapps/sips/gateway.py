@@ -6,6 +6,7 @@ import base64
 import collections
 import json
 import requests
+import logging
 from Crypto.Hash import HMAC, SHA256
 
 from django.shortcuts import redirect
@@ -51,6 +52,8 @@ SIPS_OFFICE_INTERFACE_VERSION = 'IR_WS_2.11'
 # Response status codes
 SUCCESS, MERCHANT_INVALID, TRANSACTION_INVALID, REQUEST_INVALID, SECURITY_ERROR, DUPLICATE_TRANSACTOIN = '00', '03', '12', '30', '34', '94'
 
+
+logger = logging.getLogger('oscar.checkout')
 
 class SipsPaymentError(PaymentError):
     '''
@@ -160,6 +163,8 @@ class Gateway(object):
 
 
 		json_response = response.json()
+
+		logger.info("sips return code #%s" % json_response['redirectionStatusCode'])
 
 
 		if json_response['redirectionStatusCode'] == '00':
