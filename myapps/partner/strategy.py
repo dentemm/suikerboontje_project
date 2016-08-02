@@ -19,7 +19,7 @@ class IncludingVAT(strategy.FixedRateTax):
     # this is a simplification: in reality, you might want to store tax
     # rates and the date ranges they apply in a database table.  Your
     # pricing policy could simply look up the appropriate rate.
-    rate = D('0.21')
+    rate = D('0.06')
 
 class UKStrategy(strategy.UseFirstStockRecord, IncludingVAT,
                  strategy.StockRequired, strategy.Structured):
