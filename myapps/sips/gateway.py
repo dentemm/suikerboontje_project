@@ -102,7 +102,7 @@ class Gateway(object):
 		#return_url = 'http://127.0.0.1:8000/checkout/thank-you/'
 		#return_url = 'http://127.0.0.1:8000/checkout/sips/place-order/' # DEZE WERKTE!!!
 		return_url = 'http://127.0.0.1:8000/checkout/preview/' # test 
-		return_url = 'http://suikerboon.sites.djangoeurop.com/checkout/preview/' # Host
+		return_url = 'http://suikerboon.sites.djangoeurope.com/checkout/preview/' # Host
 
 
 		basket_amount = int(kwargs['amount'] * 100)
