@@ -99,7 +99,10 @@ INSTALLED_APPS = [
 
     # third party
     'Crypto',
-    'braces'
+    'braces',
+
+    # custom apps
+    'custom',
 
 
 ] + get_core_apps(['myapps.checkout'])
@@ -326,3 +329,69 @@ OSCAR_DEFAULT_CURRENCY = 'EUR'
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '%(levelname)s %(asctime)s %(module)s %(message)s',
+        },
+        'simple': {
+            'format': '[%(asctime)s] %(message)s'
+        },
+    },
+    'root': {
+        'level': 'DEBUG',
+        'handlers': ['console'],
+    },
+    'handlers': {
+        'file':{
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': 'temm.log',
+            'formatter': 'verbose',
+        },
+        'null': {
+            'level': 'DEBUG',
+            'class': 'logging.NullHandler',
+        },
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple'
+        },
+    },
+    'loggers': {
+        'oscar': {
+            'handlers': ['file'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+        'oscar.catalogue.import': {
+            'handlers': ['console'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+        'oscar.alerts': {
+            'handlers': ['console'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+
+        # Django loggers
+        'django': {
+            'handlers': ['file'],
+            'propagate': True,
+            'level': 'INFO',
+        },
+        'django.request': {
+            'handlers': ['console'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+        'django.db.backends': {
+            'level': 'WARNING',
+            'propagate': True,
+        },
+    }
+}
