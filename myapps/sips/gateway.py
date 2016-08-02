@@ -105,7 +105,9 @@ class Gateway(object):
 		return_url = 'http://suikerboon.sites.djangoeurop.com/checkout/preview/' # Host
 
 
-		amount = '1000'
+		basket_amount = int(kwargs['amount'] * 100)
+
+		amount = str(basket_amount)
 		automaticResponseUrl = return_url
 		currencyCode = '978'
 		interfaceVersion = 'IR_WS_2.8'
