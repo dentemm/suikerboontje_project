@@ -14,5 +14,8 @@ class InfoView(TemplateView):
 	template_name = 'wat-doen-we.html'
 
 
-
+class PresentationView(TemplateView):
+	'''
+	'''
+	template_name = 'presentaties.html'
 
