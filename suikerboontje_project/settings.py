@@ -327,6 +327,8 @@ OSCAR_DASHBOARD_NAVIGATION = [
 
 OSCAR_DEFAULT_CURRENCY = 'EUR'
 
+OSCAR_SHOP_NAME = "'t Suikerboontje"
+
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 LOGGING = {
