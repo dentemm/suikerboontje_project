@@ -26,14 +26,14 @@
     {# Site logo/title, mini-basket, browse dropdown and searchbox #}
     <header id="tsb-header">
         <div id="tsb-logo">
-            <h1><a id="tsb-logo-img" href="#"><span id="tsb-logo-img-text">'t Suikerboontje</span></a></h1>
+            <h1><a id="tsb-logo-img" href="/"><span id="tsb-logo-img-text">'t Suikerboontje</span></a></h1>
         </div>
         <div class="tsb-nav">
             <ul class="tsb-nav-main">
                 <li class="tsb-nav-item">
                     <a id="tsb-nav-btn" class="tsb-btn tsb-btn--left tsb-btn--menu"></a>
                     <ul id="tsb-nav-btn-grp" class="tsb-nav-grp">
-                        <li class="tsb-nav-item"><a href="{% static '../wat-doen-we/' %}" class="tsb-btn tsb-btn--left tsb-btn--what">Wat doen we?</a></li>
+                        <li class="tsb-nav-item"><a href="{% url 'whatwedo' %}" class="tsb-btn tsb-btn--left tsb-btn--what">Wat doen we?</a></li>
                         <li class="tsb-nav-item"><a href="{% url 'catalogue:index' %}" class="tsb-btn tsb-btn--left tsb-btn--prod">Producten</a></li>
                         <li class="tsb-nav-item"><a href="#" class="tsb-btn tsb-btn--left tsb-btn--pres">Presentaties</a></li>
                         <li class="tsb-nav-item"><a href="{% static '../bezoek-onze-winkel/' %}" class="tsb-btn tsb-btn--left tsb-btn--visit">Bezoek onze winkel</a></li>

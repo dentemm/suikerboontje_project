@@ -19,13 +19,17 @@ from django.contrib import admin
 
 from oscar.app import application
 
+from myapps.views import InfoView
+
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
 
+    url(r'^wat-doen-we/$', InfoView.as_view(), name='whatwedo'),
+
     # SIPS url's
     url(r'^checkout/sips/', include('myapps.sips.urls')),
-
+    
     url(r'', include(application.urls)),
 ]
 
