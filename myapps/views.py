@@ -19,3 +19,8 @@ class PresentationView(TemplateView):
 	'''
 	template_name = 'presentaties.html'
 
+class VisitUsView(TemplateView):
+	'''
+	'''
+	template_name = 'visit-us.html'
+
