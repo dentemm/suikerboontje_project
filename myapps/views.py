@@ -21,25 +21,24 @@ class PresentationView(TemplateView):
 
 	def get_context_data(self, **kwargs):
 
-		myrange = range(1,31)
+		'''myrange = range(1,31)
 
 		urls = []
 
 		for i in myrange:
 
 			if i < 10:
-				url = 'oscar/presentaties/img0' + str(i) +'.jpg'
+				url = 'img0' + str(i) +'.jpg'
 
 			else:
-				url = 'oscar/presentaties/img' + str(i) +'.jpg'
+				url = 'img' + str(i) +'.jpg'
 
 
-			urls.append(url)
-
+			urls.append(url)'''
 
 		context = {}
 
-		context['urls'] = urls
+		#context['urls'] = urls
 
 		return context
 

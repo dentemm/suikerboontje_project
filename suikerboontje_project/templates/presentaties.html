@@ -7,15 +7,6 @@
 
 <div class="page_inner">
 	<div class="row">
-		{% for url in urls %}
-		<div class="col-md-3 col-sm-2">
-			{% with 'http://'|add:request.get_host|add:STATIC_URL|add:url as path %}
-			    {% thumbnail path "x250" as im %}
-			      <img src="{{ im }}" class="img-responsive img-thumbnail">
-			    {% endthumbnail %}
-			{% endwith %}
-		</div>
-		{% endfor %}
 	</div> 
 </div>
 
