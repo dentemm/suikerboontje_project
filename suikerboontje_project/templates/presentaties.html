@@ -1,9 +1,17 @@
 {% extends 'layout.html' %}
 
+{% load staticfiles %}
+
 {% block content_wrapper %}
 
 <div class="page_inner">
-	Hier komen de afbeeldingen van presentaties, kan je mij er al enkele bezorgen? 
+	<div class="row">
+		{% for url in urls %}
+		<div class="col-md-3 col-sm-2">
+			<img class="img-responsive img-thumbnail" src="{% static url %}">
+		</div>
+		{% endfor %}
+	</div> 
 </div>
 
 {% endblock %}

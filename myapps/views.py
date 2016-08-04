@@ -19,8 +19,34 @@ class PresentationView(TemplateView):
 	'''
 	template_name = 'presentaties.html'
 
+	def get_context_data(self, **kwargs):
+
+		myrange = range(1,31)
+
+		urls = []
+
+		for i in myrange:
+
+			if i < 10:
+				url = 'oscar/presentaties/img0' + str(i) +'.jpg'
+
+			else:
+				url = 'oscar/presentaties/img' + str(i) +'.jpg'
+
+
+			urls.append(url)
+
+
+		context = {}
+
+		context['urls'] = urls
+
+		return context
+
 class VisitUsView(TemplateView):
 	'''
 	'''
 	template_name = 'visit-us.html'
+
+
 
