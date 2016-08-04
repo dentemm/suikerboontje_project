@@ -738,6 +738,8 @@ p:last-child {
           content: "\f0e0"; }
         #tsb-ftr-content .tsb-row .tsb-col .tsb-ftr-contact .tsb-ftr-contact.tsb-ftr-contact--copy:before {
           content: "\f1f9"; }
+        #tsb-ftr-content .tsb-row .tsb-col .tsb-ftr-contact .tsb-ftr-contact.tsb-ftr-contact--fb:before {
+          content: "\f082" }
 
 #tsb-ground-middle-layer {
   background: url(../img/tsb-groundfar.png) no-repeat bottom;
