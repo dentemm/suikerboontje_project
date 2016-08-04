@@ -31,8 +31,6 @@ class Command(BaseCommand):
 						attribute.type = 'option'
 						attribute.save()
 
-
-
 		self.stdout.write('--Het is gefixt!--')
 
 
