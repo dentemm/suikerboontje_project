@@ -1,6 +1,7 @@
 {% extends 'layout.html' %}
 
 {% load staticfiles %}
+{% load thumbnail %}
 
 {% block content_wrapper %}
 
@@ -8,7 +9,11 @@
 	<div class="row">
 		{% for url in urls %}
 		<div class="col-md-3 col-sm-2">
-			<img class="img-responsive img-thumbnail" src="{% static url %}">
+			{% with 'http://'|add:request.get_host|add:STATIC_URL|add:url as path %}
+			    {% thumbnail path "x250" as im %}
+			      <img src="{{ im.url }}" class="img-responsive img-thumbnail">
+			    {% endthumbnail %}
+			{% endwith %}
 		</div>
 		{% endfor %}
 	</div> 
