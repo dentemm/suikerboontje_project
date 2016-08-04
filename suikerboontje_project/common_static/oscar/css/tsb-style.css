@@ -933,3 +933,7 @@ form#srch-frm {
   background: #dd6646; }
   .btn-danger:hover {
     background: #dd6646; }
+
+div.navbar.navbar-static-top.navbar-inverse.nav-checkout {
+  margin-top: 200px !important;
+}

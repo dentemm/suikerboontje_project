@@ -1,0 +1,107 @@
+{% load i18n %}
+{% load currency_filters %}
+{% load thumbnail %}
+
+<header id="tsb-header">
+    <div id="tsb-logo">
+        <h1><a id="tsb-logo-img" href="/"><span id="tsb-logo-img-text">'t Suikerboontje</span></a></h1>
+    </div>
+    <div class="tsb-nav">
+        <ul class="tsb-nav-main">
+            <li class="tsb-nav-item">
+                <a id="tsb-nav-btn" class="tsb-btn tsb-btn--left tsb-btn--menu"></a>
+                <ul id="tsb-nav-btn-grp" class="tsb-nav-grp">
+                    <li class="tsb-nav-item"><a href="{% url 'whatwedo' %}" class="tsb-btn tsb-btn--left tsb-btn--what">Wat doen we?</a></li>
+                    <li class="tsb-nav-item"><a href="{% url 'catalogue:index' %}" class="tsb-btn tsb-btn--left tsb-btn--prod">Producten</a></li>
+                    <li class="tsb-nav-item"><a href="{% url 'presentations' %}" class="tsb-btn tsb-btn--left tsb-btn--pres">Presentaties</a></li>
+                    <li class="tsb-nav-item"><a href="{% url 'visit-us' %}" class="tsb-btn tsb-btn--left tsb-btn--visit">Bezoek onze winkel</a></li>
+                </ul>
+            </li>
+        </ul>
+        <ul class="tsb-nav-side">
+            {% if user.is_authenticated %}
+                <li class="tsb-nav-item">
+                    {% if num_unread_notifications > 0 %}
+                        {# If user has new notifications - we change account link to go to inbox #}
+                        <a href="{% url 'customer:notifications-inbox' %}" id="tsb-nav-user" class="tsb-btn tsb-btn--left tsb-btn--round tsb-btn--user"><span class="label label-important">{{ num_unread_notifications }}</span></a>
+                    {% else %}
+                        <a href="{% url 'customer:summary' %}" id="tsb-nav-user" class="tsb-btn tsb-btn--left tsb-btn--round tsb-btn--user"><span class="tsb-btn-text--hidden">Aanmelden/Registreren</span></a>
+                    {% endif %}
+                </li>
+                {% if user.is_staff or perms.partner.dashboard_access %}
+                    <li class="tsb-nav-item"><a href="{% url 'dashboard:index' %}" id="nav-user" class="tsb-btn tsb-btn--left tsb-btn--round tsb-btn--dash"><span class="tsb-btn-text--hidden">Dashboard</span></a></li>
+                {% endif %}
+                <li class="tsb-nav-item"><a href="{% url 'customer:logout' %}" class="tsb-btn tsb-btn--left tsb-btn--round tsb-btn--out"><span class="tsb-btn-text--hidden">Afmelden</span></a></li>
+            {% else %}
+                <li class="tsb-nav-item"><a href="{% url 'customer:login' %}" id="tsb-nav-user" class="tsb-btn tsb-btn--left tsb-btn--round tsb-btn--user"><span class="tsb-btn-text--hidden">Aanmelden/Registreren</span></a></li>
+            {% endif %}
+            <li class="tsb-nav-item">
+                <a id="tsb-nav-cart" class="tsb-btn tsb-btn--left tsb-btn--down tsb-btn--round tsb-btn--cart"><span class="tsb-btn-text--hidden">Winkelmand: </span><span class="tsb-btn-text">
+                    {% if request.basket.is_tax_known %}
+                        {{ request.basket.total_incl_tax|currency:request.basket.currency }}
+                    {% else %}
+                        {{ request.basket.total_excl_tax|currency:request.basket.currency }}
+                    {% endif %}
+                </span></a>
+                <ul id="tsb-nav-cart-grp" class="tsb-nav-grp tsb-cart">
+                    {% if request.basket.num_lines %}
+                        <li class="tsb-cart-row">
+                            <div class="tsb-cart-col tsb-cart-col--pic">&nbsp;</div>
+                            <div class="tsb-cart-col tsb-cart-col--desc">Naam</div>
+                            <div class="tsb-cart-col tsb-cart-col--qty">{% trans "Qty" %}</div>
+                            <div class="tsb-cart-col tsb-cart-col--amount">Prijs</div>
+                        </li>
+                        <div class="tsb-cart-list">
+                            {% for line in request.basket.all_lines %}
+                                <li class="tsb-cart-row">
+                                    <div class="tsb-cart-col tsb-cart-col--pic">
+                                        <div class="image_container">
+                                            {% with image=line.product.primary_image %}
+                                                {% thumbnail image.original "100x100" upscale=False as thumb %}
+                                                <a href="{{ line.product.get_absolute_url }}"><img class="thumbnail" src="{{ thumb.url }}" alt="{{ line.product.get_title }}"></a>
+                                                {% endthumbnail %}
+                                            {% endwith %}
+                                        </div>
+                                    </div>
+                                    <div class="tsb-cart-col tsb-cart-col--desc">
+                                        <a href="{{ line.product.get_absolute_url }}">{{ line.description }}</a>
+                                    </div>
+                                    <div class="tsb-cart-col tsb-cart-col--qty">{{ line.quantity }}</div>
+                                    {% if request.basket.is_tax_known %}
+                                        <div class="tsb-cart-col tsb-cart-col--amount">{{ line.unit_price_incl_tax|currency:request.basket.currency }}</div>
+                                    {% else %}
+                                        <div class="tsb-cart-col tsb-cart-col--amount">{{ line.unit_price_excl_tax|currency:request.basket.currency }}</div>
+                                    {% endif %}
+                                </li>
+                            {% endfor %}
+                        </div>
+                        <li class="tsb-cart-total">
+                            {% if request.basket.is_tax_known %}
+                                {% trans "Total:" %} <span class="tsb-cart-total-amount">{{ request.basket.total_incl_tax|currency:request.basket.currency }}</span>
+                            {% else %}
+                                {% trans "Total:" %} <span class="tsb-cart-total-amount">{{ request.basket.total_excl_tax|currency:request.basket.currency }}</span>
+                            {% endif %}
+                        </li>
+                        <li class="tsb-cart-ftr">
+                            <a href="{% url 'checkout:index' %}" class="tsb-btn tsb-btn--right">{% trans "Checkout" %}</a>
+                            <a href="{% url 'basket:summary' %}" class="tsb-btn tsb-btn--right tsb-btn--smpl">{% trans "View basket" %}</a>
+                        </li>
+                    {% else %}
+                        <li><p>{% trans "Your basket is empty." %}</p></li>
+                    {% endif %}
+                </ul>
+            </li>
+            <li class="tsb-nav-item">
+                <a id="tsb-nav-srch" class="tsb-btn tsb-btn--left tsb-btn--down tsb-btn--round tsb-btn--search"><span class="tsb-btn-text--hidden">Producten zoeken</span></a>
+                <div id="tsb-nav-srch-grp" class="tsb-nav-grp">
+                    <form method="get" id="srch-frm" action="{% url 'search:search' %}">
+                        <div class="tsb-srch"><input name="q" class="tsb-srch-input" placeholder="Zoek producten&hellip;" /></div>
+                    </form>
+                </div>
+            </li>
+        </ul>
+    </div>
+    <div id="tsb-airplane-layer">&nbsp;</div>
+    <div id="tsb-clouds-layer">&nbsp;</div>
+    <div id="tsb-sun-layer">&nbsp;</div>
+</header>
