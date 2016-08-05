@@ -10,6 +10,7 @@ from oscar.core import prices
 from oscar.core.loading import get_class, get_model
 
 from oscar.apps.checkout import exceptions
+from oscar.apps.catalogue.models import ProductAttributeValue
 
 Repository = get_class('shipping.repository', 'Repository')
 OrderTotalCalculator = get_class(
@@ -237,14 +238,39 @@ class CheckoutSessionMixin(object):
     # CUSTOM PRE CONDITIONS
     def check_minimum_purchase_amount(self, request):
 
-        print 'check minimum purchase amount'
-        print request.basket
-        print 'basket hierboven'
+        #print request.basket
 
-        raise InsufficientAmountException(
-            url=reverse('basket:summary'),
-            message=_("Je winkelmandje bevat 1 of meerdere items die niet voldoen aan de vereiste minimum afname. Gelieve je aantallen aan te passen!")
-        )         
+        # Voor elke lijn uit het winkelmandje 
+        for line in request.basket._lines:
+
+            # Kijk de attributen van elk product na
+            for attr in line.product.attributes.all():
+
+                # Als het minimum attribute aanwezig is
+                if attr.code == 'minimum':
+                    #print 'we hebben een match!'
+
+                    # Ga dan na of de bestelde hoeveelheid niet lager is dan de minimum afname hoeveelheid
+                    try:
+                        min_value = line.product.attribute_values.get(attribute__code=attr.code) 
+
+                        print 'min waarde: ' + str(min_value)
+                        print min_value.value
+
+                        if line.quantity < min_value.value:
+
+                            print 'te weinig!'
+                            print line.quantity
+
+                            raise InsufficientAmountException(
+                                url=reverse('basket:summary'),
+                                message=_("Je winkelmandje bevat 1 of meerdere items die niet voldoen aan de vereiste minimum afname. Gelieve je aantallen aan te passen!")
+                            ) 
+                    
+                    except ProductAttributeValue.DoesNotExist:
+                        pass 
+
+
 
     # Re-usable skip conditions
 
