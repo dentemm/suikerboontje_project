@@ -314,10 +314,10 @@ OSCAR_DASHBOARD_NAVIGATION = [
                 'label': _('Email templates'),
                 'url_name': 'dashboard:comms-list',
             },
-            {
-                'label': _('Reviews'),
-                'url_name': 'dashboard:reviews-list',
-            },
+#            {
+#                'label': _('Reviews'),
+#                'url_name': 'dashboard:reviews-list',
+#            },
         ]
     },
 #    {

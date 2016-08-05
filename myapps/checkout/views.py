@@ -52,16 +52,6 @@ class PaymentDetailsView(OscarPaymentDetailsView):
     def dispatch(self, request, *args, **kwargs):
         return super(PaymentDetailsView, self).dispatch(request, *args, **kwargs)
 
-    def get_context_data(self, **kwargs):
-        '''
-        Het bankkaart form dient toegevoegd te worden aan de context
-        EDIT: niet nodig voor BCMC
-        '''
-        # Add bankcard form to the template context
-        ctx = super(PaymentDetailsView, self).get_context_data(**kwargs)
-        #ctx['bankcard_form'] = kwargs.get('bankcard_form', BankcardForm())
-        
-        return ctx
 
     def handle_payment(self, order_number, total, **kwargs):
         '''
@@ -72,10 +62,6 @@ class PaymentDetailsView(OscarPaymentDetailsView):
 
         facade = Facade()
 
-        #url = facade.pre_authorise(order_number, total.incl_tax)
-        #raise RedirectRequired(url)
-
-        
         url, redirectionVersion, redirectionData = facade.pre_authorise(order_number, total.incl_tax)
 
         print 'succesvol geretourneerd! -- terug in handle_payment() methode'
@@ -100,38 +86,6 @@ class PaymentDetailsView(OscarPaymentDetailsView):
         self.add_payment_event('auth', total.incl_tax)
 
 
-        
-
-        '''except Exception as e:
-            # Unhandled exception - hopefully, you will only ever see this in
-            # development...
-            logger.error(
-                    "Order #%s: unhandled exception while taking payment (%s)",
-                    order_number, e, exc_info=True)
-            self.restore_frozen_basket()
-
-            print 'error' + str(e)
-
-            return self.render_preview(
-                    self.request, error=error_msg, **payment_kwargs)
-
-        except:
-
-            print 'exception'
-            '''
-
-        '''try:
-            url = facade.pre_authorise(order_number, total.incl_tax)
-            #url, redirectionVersion, redirectionData = facade.pre_authorise(order_number, total.incl_tax)
-
-            raise RedirectRequired(url)
-            #raise SipsRedirectRequired(url, redirectionVersion, redirectionData)
-
-        except:
-
-            print 'toch ergens iets misgelopen ... '
-            '''
-
         print 'succesvol geretourneerd! -- terug in handle_payment() methode'
 
         logger.info("Order: redirecting to %s", url)
@@ -150,64 +104,6 @@ class PaymentDetailsView(OscarPaymentDetailsView):
 
         # Record payment event
         self.add_payment_event('auth', total.incl_tax)
-
-
-
-
-
-        # Gateway initiates payment with Sips Connector  which returns url + submit data
-
-        '''try:
-            url, redirectionVersion, redirectionData = facade.pre_authorise(order_number, total.incl_tax)
-
-            raise SipsRedirectRequired(url, redirectionVersion, redirectionData)
-
-        except UnableToTakePayment as e:
-            # Er heeft zich een fout voorgedaan bij SIPS authorisatie
-
-            print 'unable to take payment'
-
-            msg = e
-            logger.warning("Order #%s: unable to take payment (%s) - restoring basket",order_number, msg)
-            self.restore_frozen_basket()
-
-            messages.error(self.request, ("We were unable to authorise your order: %s") % e)
-
-            url = reverse('dashboard:order-detail', kwargs={'number': order_number})
-            response = http.HttpResponseRedirect(url)
-
-            return response'''
-
-
-            #return self.render_payment_details(self.request, error=msg)
-
-            #print 'error' + str(e)
-            #raise SipsRedirectRequired('/', None, None)
-
-
-
-
-        #logger.info("Order: redirecting to %s", url)
-
-        #print 'data' + str(data)
-
-        # 
-        #raise SipsRedirectRequired(url, redirectionVersion, redirectionData)
-
-
-        #print 'we gaan verder na redirect required!!!'
-
-        # Payment successful! Record payment source
-        '''source_type, __ = models.SourceType.objects.get_or_create(
-            name="SomeGateway")
-        source = models.Source(
-            source_type=source_type,
-            amount_allocated=total.incl_tax,
-            reference=reference)
-        self.add_payment_source(source)
-
-        # Record payment event
-        self.add_payment_event('auth', total.incl_tax)'''
 
 
     def submit(self, user, basket, shipping_address, shipping_method,  # noqa (too complex (10))
@@ -380,45 +276,6 @@ class PaymentDetailsView(OscarPaymentDetailsView):
                     self.request, error=msg, **payment_kwargs)
 
 
-    def submiiit(self, user, basket, shipping_address, shipping_method, shipping_charge, billing_address, order_total, payment_kwargs=None, order_kwargs=None):
-        '''
-        Deze methode roept handle_payment() op, en verwerkt eventuele fouten die handle_payment() retourneert
-        '''
-
-        print 'checkout view: submit methode'
-
-        # generator is responsible for generating basket id, this will be used for order processing
-        generator = OrderNumberGenerator()
-        order_number = generator.order_number(basket)
-
-
-        try:
-            # roep handle_payment() op
-            self.handle_payment(order_number, order_total, **payment_kwargs)
-
-        except SipsRedirectRequired as e:
-
-            logger.info("Order #%s: redirecting to %s", order_number, e.url)
-
-            data = {
-                'redirectionVersion': e.redirectionVersion,
-                'redirectionData': e.redirectionData
-            }
-
-            # urlencode retourneert url parameters
-            payload = urlencode(data)
-
-            # volledige url bestaat uit base url + urlencoded parameters
-            complete_url = '%s?%s' % (e.url, payload)
-
-
-            return http.HttpResponseRedirect(complete_url)
-
-
-        return super(PaymentDetailsView, self).submit(user,basket,shipping_address,shipping_method,shipping_charge,billing_address,order_total,payment_kwargs,order_kwargs)
-
-
-
     def handle_payment_details_submission(self, request):
         '''
         Deze methode wordt opgeroepen wanneer je in de checkout procedure naar de 'preview' stap gaat
@@ -437,72 +294,5 @@ class PaymentDetailsView(OscarPaymentDetailsView):
         return self.render_preview(request)
 
 
-    def post(self, request, *args, **kwargs):
-
-        return super(PaymentDetailsView, self).post(request, *args, **kwargs)
-
-class SuccessResponseView(JsonRequestResponseMixin, OscarPaymentDetailsView):
-
-    print 'success response view - checkout.views'
-
-    template_name_preview = 'sips/preview.html'
-
-    def get(self, request, *args, **kwargs):
-
-        print '---------RETURN GET ---------'
-
-        return None
-
-    def post(self, request, *args, **kwargs):
-
-        print ' ++++++ success response view: POST methode'
-
-        try: 
-            data = request.POST['data']
-            print data
-
-        except KeyError:
-
-            print 'shiiiiiiiiiiiiiiiiiit!'
-
-class ThankYouView(JsonRequestResponseMixin, OscarThankYouView):
-
-    @method_decorator(csrf_exempt)
-    def dispatch(self, request, *args, **kwargs):
-
-        print 'mythankyouview'
-
-        return super(ThankYouView, self).dispatch(request, *args, **kwargs)
-
-    def post(self, request, *args, **kwargs):
-
-        print 'post'
-
-        total = 1000
-        reference = 'reference'
-
-        # Payment successful! Record payment source
-        source_type, __ = models.SourceType.objects.get_or_create(
-            name="SomeGateway")
-        source = models.Source(
-            source_type=source_type,
-            amount_allocated=total,
-            reference=reference)
-        self.add_payment_source(source)
-
-        # Record payment event
-        self.add_payment_event('auth', total)
-
-        return super(ThankYouView, self).get(self, request, *args, **kwargs)
-
-    def get(self, request, *args, **kwargs):
-
-        print 'get'
-
-        print args
-        print kwargs
-        print request.GET
-
-        return super(ThankYouView, self).get(self, request, *args, **kwargs)
 
 
