@@ -56,11 +56,11 @@ coverage.xml
 manage.py
 
 #settings.py
-settings_deployment.py
+#settings_deployment.py
 project.db
 *.sqlite3
 
-
+db.sqlite3
 
 # Sphinx documentation
 docs/_build/
