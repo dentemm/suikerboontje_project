@@ -105,7 +105,7 @@ INSTALLED_APPS = [
     'custom',
 
 
-] + get_core_apps(['myapps.checkout', 'myapps.partner'])
+] + get_core_apps(['myapps.checkout', 'myapps.partner', 'myapps.basket'])
 #] + get_core_apps(['myapps.checkout'])
 
 SITE_ID = 1

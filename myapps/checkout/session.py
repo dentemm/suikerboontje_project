@@ -271,7 +271,6 @@ class CheckoutSessionMixin(object):
                         pass 
 
 
-
     # Re-usable skip conditions
 
     def skip_unless_basket_requires_shipping(self, request):
