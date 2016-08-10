@@ -142,16 +142,23 @@ class AddToBasketForm(forms.Form):
         self.basket = basket
         self.parent_product = product
 
-        print 'kwargs' + str(kwargs)
-
         super(AddToBasketForm, self).__init__(*args, **kwargs)
+
+        # Toevoeging aan __init__() methode om het basket in te stellen met de minimum vereiste hoeveelheid
+        
+        for attr in product.attributes.all():
+
+            if attr.code == 'minimum':
+                minimum = product.attribute_values.get(attribute__code=attr.code).value
+
+                #print 'minimum: ' + str(minimum)
+                #print self.fields
+                self.fields['quantity'] = forms.IntegerField(initial=minimum, min_value=minimum, label=_('Quantity'))
 
         # Dynamically build fields
         if product.is_parent:
             self._create_parent_product_fields(product)
         self._create_product_fields(product)
-
-        print 'add to basket form'
 
     # Dynamic form building methods
 
@@ -284,7 +291,22 @@ class SimpleAddToBasketForm(AddToBasketForm):
     defaulted to 1 and rendered in a hidden widget
     """
 
-    print 'SIMPLE add to basket form'
+    #print 'SIMPLE add to basket form'
+
+    def __init__(self, basket, product, *args, **kwargs):
+
+        super(SimpleAddToBasketForm, self).__init__(basket, product, *args, **kwargs)
+
+        for attr in product.attributes.all():
+
+            if attr.code == 'minimum':
+                minimum = product.attribute_values.get(attribute__code=attr.code).value
+
+                #print 'minimum: ' + str(minimum)
+                #print self.fields
+                self.fields['quantity'] = forms.IntegerField(initial=minimum, min_value=minimum, widget=forms.HiddenInput, label=_('Quantity'))
+
+
 
     quantity = forms.IntegerField(
         initial=1, min_value=1, widget=forms.HiddenInput, label=_('Quantity'))
