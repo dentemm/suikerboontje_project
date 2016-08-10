@@ -142,6 +142,8 @@ class AddToBasketForm(forms.Form):
         self.basket = basket
         self.parent_product = product
 
+        print 'kwargs' + str(kwargs)
+
         super(AddToBasketForm, self).__init__(*args, **kwargs)
 
         # Dynamically build fields
@@ -281,5 +283,8 @@ class SimpleAddToBasketForm(AddToBasketForm):
     Simplified version of the add to basket form where the quantity is
     defaulted to 1 and rendered in a hidden widget
     """
+
+    print 'SIMPLE add to basket form'
+
     quantity = forms.IntegerField(
         initial=1, min_value=1, widget=forms.HiddenInput, label=_('Quantity'))
