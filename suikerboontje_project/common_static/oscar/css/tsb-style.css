@@ -947,3 +947,12 @@ div.navbar.navbar-static-top.navbar-inverse.nav-checkout {
   color: #a94442;
 }
 
+ol.row > li.col-xs-6, li.col-sm-4, li.col-md-3, li.col-lg-3 {
+  padding-left: 10px !important;
+  padding-right: 10px !important;
+}
+
+article.product_pod {
+  margin: 10px 0px;
+}
+
