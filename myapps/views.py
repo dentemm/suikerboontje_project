@@ -1,5 +1,7 @@
 from django.views.generic import TemplateView, View
 
+from custom.models import CustomImage
+
 
 #from braces.views import JsonRequestResponseMixin
 
@@ -21,6 +23,10 @@ class PresentationView(TemplateView):
 
 	def get_context_data(self, **kwargs):
 
+		images = CustomImage.objects.all()
+
+
+
 		'''myrange = range(1,31)
 
 		urls = []
@@ -38,7 +44,9 @@ class PresentationView(TemplateView):
 
 		context = {}
 
-		#context['urls'] = urls
+
+
+		context['images'] = images
 
 		return context
 

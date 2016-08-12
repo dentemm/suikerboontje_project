@@ -4,6 +4,152 @@
 
 <div class="page_inner">
 	Hier komt de contactinformatie, samen met een Google Maps kaart. Een foto van de winkel is misschien ook nog handig.
+
+	<div id="map"></div>
+
 </div>
+	<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?v=3&language=nl&region=BE"></script>
+    <script type="text/javascript">
+        var map;
+        var global_markers = [];
+
+        function initialize() {
+
+            geocoder = new google.maps.Geocoder();
+            var latlng = new google.maps.LatLng(50.85951, 4.7403); 
+            var myOptions = {
+                zoom: 11,
+                center: latlng,
+                scrollwheel: false,
+                mapTypeControlOptions: {
+                    mapTypeIds: [google.maps.MapTypeId.ROADMAP, 'map_style']
+                }
+
+                //mapTypeId: google.maps.MapTypeId.ROADMAP
+            }
+            map = new google.maps.Map(document.getElementById("map"), myOptions);
+
+            var myLatLng = {lat: 50.863290, lng: 4.761116};
+
+            var marker = new google.maps.Marker({
+	          position: myLatLng,
+	          map: map,
+	          title: 'TSuikerboontje'
+	        });
+
+             
+            //map.mapTypes.set('map_style', styledMap);
+            //map.setMapTypeId('map_style');
+
+        }
+        window.onload = initialize;
+
+    </script>
+<script type="text/javascript">
+[
+    {
+        "featureType": "landscape",
+        "stylers": [
+            {
+                "hue": "#FFE100"
+            },
+            {
+                "saturation": 34.48275862068968
+            },
+            {
+                "lightness": -1.490196078431353
+            },
+            {
+                "gamma": 1
+            }
+        ]
+    },
+    {
+        "featureType": "road.highway",
+        "stylers": [
+            {
+                "hue": "#FF009A"
+            },
+            {
+                "saturation": -2.970297029703005
+            },
+            {
+                "lightness": -17.815686274509815
+            },
+            {
+                "gamma": 1
+            }
+        ]
+    },
+    {
+        "featureType": "road.arterial",
+        "stylers": [
+            {
+                "hue": "#FFE100"
+            },
+            {
+                "saturation": 8.600000000000009
+            },
+            {
+                "lightness": -4.400000000000006
+            },
+            {
+                "gamma": 1
+            }
+        ]
+    },
+    {
+        "featureType": "road.local",
+        "stylers": [
+            {
+                "hue": "#00C3FF"
+            },
+            {
+                "saturation": 29.31034482758622
+            },
+            {
+                "lightness": -38.980392156862735
+            },
+            {
+                "gamma": 1
+            }
+        ]
+    },
+    {
+        "featureType": "water",
+        "stylers": [
+            {
+                "hue": "#0078FF"
+            },
+            {
+                "saturation": 0
+            },
+            {
+                "lightness": 0
+            },
+            {
+                "gamma": 1
+            }
+        ]
+    },
+    {
+        "featureType": "poi",
+        "stylers": [
+            {
+                "hue": "#00FF19"
+            },
+            {
+                "saturation": -30.526315789473685
+            },
+            {
+                "lightness": -22.509803921568633
+            },
+            {
+                "gamma": 1
+            }
+        ]
+    }
+]
+</script>
 
 {% endblock %}
