@@ -965,3 +965,38 @@ div#thumbnail-presentations div.col-md-3 {
   padding: 5px;
 }
 
+p.adjusted {
+  padding-top: 0px;
+  padding-left: 0px;
+}
+
+ul.contact {
+  list-style: none;
+  padding-left: 1em;
+}
+
+ul.contact li {
+  padding-left: 1em;
+  padding-bottom: 0em;
+  padding-top: 1em;
+  text-indent: -20px;
+
+}
+
+li#contact-home:before {
+  font-family: FontAwesome;
+  content: "\f015";
+  padding-right: 5px;
+}
+
+li#contact-phone:before {
+  font-family: FontAwesome;
+  content: "\f095";
+  padding-right: 6px;
+}
+
+li#contact-mail:before {
+  font-family: FontAwesome;
+  content: "\f0e0";
+  padding-right: 6px;
+}
