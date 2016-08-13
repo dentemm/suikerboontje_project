@@ -17,7 +17,7 @@
 		<div class="row" id="thumbnail-presentations">
 			{% for thumbnail in image_list %}
 				{% thumbnail thumbnail '300x300' crop='center' as img %}
-				<div class="col-md-3">
+				<div class="col-md-3 col-sm-4 col-xs-6">
 					<a class="fancybox" rel="group" href="{{ thumbnail.image.url }}">
 						<img class="img img-thumbnail" src="{{ img.url }}">
 					</a>
