@@ -2,19 +2,43 @@
 
 {% load staticfiles %}
 {% load thumbnail %}
+{% load compress %}
+
+{% block extrastyles %}
+    {{ block.super }}
+    {% compress css %}
+        <!-- custom select2 overrides -->
+        <link rel="stylesheet" type="text/css" href="{% static 'oscar/plugins/fancybox/jquery.fancybox.css' %}">
+    {% endcompress %}
+{% endblock %}
 
 {% block content_wrapper %}
-
-<div class="page_inner">
-	<div class="row" id="thumbnail-presentations">
-		{% for image in thumbnails %}
-			<div class="col-md-3">
-				{% thumbnail image.image '300x300' crop='center' as img %}
-				<img class="img img-thumbnail" src="{{ img.url }}">
+	<div class="page_inner">
+		<div class="row" id="thumbnail-presentations">
+			{% for image, thumbnail in image_list %}
+				{% thumbnail thumbnail '300x300' crop='center' as img %}
+				<div class="col-md-3">
+					<a class="fancybox" rel="group" href="{{ image.image.url }}">
+						<img class="img img-thumbnail" src="{{ img.url }}">
+					</a>
+				</div>
 				{% endthumbnail %}
-			</div>
-		{% endfor %}
-	</div> 
-</div>
+			{% endfor %}
+		</div> 
+	</div>
+{% endblock %}
 
+{% block extrascripts %}
+    {{ block.super }}
+
+    {% compress js %}
+        {# jQuery plugins #}
+        <script type="text/javascript" src="{% static 'oscar/plugins/fancybox/jquery.fancybox.js' %}"></script>
+        <script type="text/javascript">
+        	$(document).ready(function(){
+        		$.fancybox();
+        		$('.fancybox').fancybox();
+        	});
+        </script>
+    {% endcompress %}
 {% endblock %}

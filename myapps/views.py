@@ -26,6 +26,7 @@ class PresentationView(TemplateView):
 		images = CustomImage.objects.all()
 		thumbnails = ThumbnailImage.objects.all()
 
+		image_list = zip(images, thumbnails)
 
 
 		'''myrange = range(1,31)
@@ -49,6 +50,7 @@ class PresentationView(TemplateView):
 
 		context['images'] = images
 		context['thumbnails'] = thumbnails
+		context['image_list'] = image_list
 
 		return context
 
