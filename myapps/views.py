@@ -23,10 +23,10 @@ class PresentationView(TemplateView):
 
 	def get_context_data(self, **kwargs):
 
-		images = CustomImage.objects.all()
+		#images = CustomImage.objects.all()
 		thumbnails = ThumbnailImage.objects.all()
 
-		image_list = zip(images, thumbnails)
+		#image_list = zip(images, thumbnails)
 
 
 		'''myrange = range(1,31)
@@ -48,9 +48,10 @@ class PresentationView(TemplateView):
 
 
 
-		context['images'] = images
-		context['thumbnails'] = thumbnails
-		context['image_list'] = image_list
+		#context['images'] = images
+		#context['thumbnails'] = thumbnails
+		#context['image_list'] = image_list
+		context['image_list'] = thumbnails
 
 		return context
 
