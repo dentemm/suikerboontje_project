@@ -6,10 +6,12 @@
 {% block content_wrapper %}
 
 <div class="page_inner">
-	<div class="row">
-		{% for image in images %}
-			<div class="col-md-4">
-				<img class="img img-thumbnail" src="{{ image.image.url }}">
+	<div class="row" id="thumbnail-presentations">
+		{% for image in thumbnails %}
+			<div class="col-md-3">
+				{% thumbnail image.image '300x300' crop='center' as img %}
+				<img class="img img-thumbnail" src="{{ img.url }}">
+				{% endthumbnail %}
 			</div>
 		{% endfor %}
 	</div> 

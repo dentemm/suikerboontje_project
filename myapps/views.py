@@ -1,6 +1,6 @@
 from django.views.generic import TemplateView, View
 
-from custom.models import CustomImage
+from custom.models import CustomImage, ThumbnailImage
 
 
 #from braces.views import JsonRequestResponseMixin
@@ -24,6 +24,7 @@ class PresentationView(TemplateView):
 	def get_context_data(self, **kwargs):
 
 		images = CustomImage.objects.all()
+		thumbnails = ThumbnailImage.objects.all()
 
 
 
@@ -47,6 +48,7 @@ class PresentationView(TemplateView):
 
 
 		context['images'] = images
+		context['thumbnails'] = thumbnails
 
 		return context
 

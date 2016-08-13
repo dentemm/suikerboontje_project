@@ -961,3 +961,7 @@ div#map{
   width: 100%
 }
 
+div#thumbnail-presentations div.col-md-3 {
+  padding: 10px;
+}
+
