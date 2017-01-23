@@ -32,7 +32,7 @@ SECRET_KEY = 'grrdb)ro5^_g2%cwh(o4v&r7&981=^n4u4yh*hf&lk)-rd7qh='
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['suikerboon.sites.djangoeurope.com', ]
 
 
 # Application definition

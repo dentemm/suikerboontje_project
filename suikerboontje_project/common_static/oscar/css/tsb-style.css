@@ -878,7 +878,7 @@ h3 {
   font-weight: 700; 
 }
 
-.product_pod .product_price span.btn, .product_pod .product_price button.btn {
+.product_pod .product_price span.btn, .product_pod .product_price button.btn {  
   margin: 10px 0;
   padding: 8px;
   border-radius: 5px 0 0 5px;
