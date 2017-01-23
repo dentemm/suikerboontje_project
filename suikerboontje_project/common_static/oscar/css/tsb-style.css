@@ -857,42 +857,52 @@ h3 {
   border-radius: 5px;
   box-shadow: 0 0 2px #bf9f8f;
   border: 1px solid #bf9f8f;
-  height: 260px;
-  transition: border .5s; }
-  .product_pod:hover {
-    border: 1px solid #7b5d4f; }
-  .product_pod .product_price p {
-    float: left;
-    background: #694b2e;
-    color: #fff;
-    margin: 10px 0;
-    padding: 5px;
-    font-size: 15px;
-    display: block;
-    border-radius: 0 5px 5px 0;
-    font-weight: 700; }
-  .product_pod .product_price span.btn, .product_pod .product_price button.btn {
-    float: right;
-    width: auto;
-    margin: 10px 0;
-    padding: 8px;
-    border-radius: 5px 0 0 5px;
-    background: #694b2e;
-    border: none;
-    color: #fff; }
-    .product_pod .product_price span.btn.disabled, .product_pod .product_price button.btn.disabled {
-      background: #bf9f8f; }
-    .product_pod .product_price span.btn:before, .product_pod .product_price button.btn:before {
-      margin: 0 3px 0 2px;
-      content: "\f07a";
-      font: normal normal normal 15px/1 FontAwesome; }
+  height: 320px;
+  transition: border .5s; 
+}
+.product_pod:hover {
+  border: 1px solid #7b5d4f; 
+}
+.product_pod .product_price p {
+
+  background: #694b2e;
+  color: #fff;
+  margin: 10px 0;
+  padding: 5px;
+  font-size: 13px;
+  border-radius: 0 5px 5px 0;
+  font-weight: 500; 
+}
+.product_pod .product_price p.price_color {
+  font-size: 16px !important;
+  font-weight: 700; 
+}
+
+.product_pod .product_price span.btn, .product_pod .product_price button.btn {
+  margin: 10px 0;
+  padding: 8px;
+  border-radius: 5px 0 0 5px;
+  background: #694b2e;
+  border: none;
+  color: #fff; 
+}
+.product_pod .product_price span.btn.disabled, .product_pod .product_price button.btn.disabled {
+  background: #bf9f8f; 
+}
+.product_pod .product_price span.btn:before, .product_pod .product_price button.btn:before {
+  margin: 0 3px 0 2px;
+  content: "\f07a";
+  font: normal normal normal 15px/1 FontAwesome; 
+}
 
 .thumbnail {
   border: none;
-  box-shadow: none; }
-  .thumbnail:hover {
+  box-shadow: none;
+}
+.thumbnail:hover {
     border: none !important;
-    box-shadow: none !important; }
+    box-shadow: none !important; 
+}
 
 .hide-text {
   text-indent: -9999px;
@@ -940,7 +950,7 @@ div.navbar.navbar-static-top.navbar-inverse.nav-checkout {
   margin-top: 200px !important;
 }
 
-/* Aanvullingen Tim*/
+/* Aanvullingen Tim Temm */
 .alert-error {
   background-color: #f2dede;
   border-color: #ebccd1;
@@ -950,10 +960,6 @@ div.navbar.navbar-static-top.navbar-inverse.nav-checkout {
 ol.row > li.col-xs-6, li.col-sm-4, li.col-md-3, li.col-lg-3 {
   padding-left: 10px !important;
   padding-right: 10px !important;
-}
-
-article.product_pod {
-  margin: 10px 0px;
 }
 
 div#map{
@@ -1000,3 +1006,20 @@ li#contact-mail:before {
   content: "\f0e0";
   padding-right: 6px;
 }
+
+/* CATALOGUE */
+article.product_pod {
+  margin: 10px 0px;
+}
+
+article.product_pod h3 {
+  font-size: 18px;
+}
+
+div.product-price {
+  height: 15em;
+}
+
+
+
+
