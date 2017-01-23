@@ -160,11 +160,11 @@ TEMPLATES = [
     },
 ]
 
-TEMPLATE_LOADERS = (
-    'django.template.loaders.filesystem.Loader',
-    'django.template.loaders.app_directories.Loader',
-    #'django.template.loaders.eggs.Loader',
-)
+# TEMPLATE_LOADERS = (
+#     'django.template.loaders.filesystem.Loader',
+#     'django.template.loaders.app_directories.Loader',
+#     #'django.template.loaders.eggs.Loader',
+# )
 
 AUTHENTICATION_BACKENDS = (
     'oscar.apps.customer.auth_backends.EmailBackend',
@@ -399,3 +399,8 @@ LOGGING = {
         },
     }
 }
+
+# OSCAR SETTINGS
+
+OSCAR_PRODUCTS_PER_PAGE = 24
+OSCAR_RECENTLY_VIEWED_PRODUCTS = 10

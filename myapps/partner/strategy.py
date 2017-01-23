@@ -8,7 +8,7 @@ class Selector(object):
     """
 
     def strategy(self, request=None, user=None, **kwargs):
-        return UKStrategy()
+        return MyStrategy()
 
 
 class IncludingVAT(strategy.FixedRateTax):
@@ -21,7 +21,7 @@ class IncludingVAT(strategy.FixedRateTax):
     # pricing policy could simply look up the appropriate rate.
     rate = D('0.06')
 
-class UKStrategy(strategy.UseFirstStockRecord, IncludingVAT,
+class MyStrategy(strategy.UseFirstStockRecord, IncludingVAT,
                  strategy.StockRequired, strategy.Structured):
     """
     Typical UK strategy for physical goods.
