@@ -1,58 +1,75 @@
 {% extends 'layout.html' %}
+{% load compress %}
+
+{% block extrastyles %}
+    {{ block.super }}
+    {% compress css %}
+        <!-- FontAwesome -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
+    {% endcompress %}
+{% endblock %}
+
+
 
 {% block content_wrapper %}
-
 <div class="page_inner">
+	<div class="row">
+		<div class="col-md-7">
 
-	<h2>Wat doen we?</h2>
-	<p>
-		Zoals onze naam al doet vermoeden verzorgen wij al meer dan twintig jaar de kleine, met lekkers gevulde, geschenkjes bij talloze geboortes.
-	</p>
-	<p>
-		Mag jij binnenkort een kindje verwelkomen? Dan ben je bij ons aan het juiste adres. Van geboortekaartjes en suikerbonen tot gepersonaliseerde cadeautjes en aankondigingen. Ook voor een doop, babyborrel, communie, lentefeest, trouw of jubileum kan je bij ons terecht. We groeien mee met jou kids om elk feest onvergetelijk te maken. Zo zorgen we voor een persoonlijke service helemaal op jou maat. Vaar elke smaak en elk budget. Geen kindje in het verschiet? Dan ben je steeds welkom om eens te proeven van onze heerlijke Belgische chocolade of ons traditioneel snoep.
-	</p>
+			<h2>Wat doen we?</h2>
+			<p>
+				Zoals onze naam al doet vermoeden verzorgen wij al meer dan twintig jaar de kleine, met lekkers gevulde, geschenkjes bij talloze geboortes.
+			</p>
+			<p>
+				Mag jij binnenkort een kindje verwelkomen? Dan ben je bij ons aan het juiste adres. Van geboortekaartjes en suikerbonen tot gepersonaliseerde cadeautjes en aankondigingen. Ook voor een doop, babyborrel, communie, lentefeest, trouw of jubileum kan je bij ons terecht. We groeien mee met jou kids om elk feest onvergetelijk te maken. Zo zorgen we voor een persoonlijke service helemaal op jou maat. Vaar elke smaak en elk budget. Geen kindje in het verschiet? Dan ben je steeds welkom om eens te proeven van onze heerlijke Belgische chocolade of ons traditioneel snoep.
+			</p>
 
-	<h2>Praktisch</h2>
+			<h2>Praktisch</h2>
 
-	<h4>In verwachting?</h4>
-	<p>	
-		Om er voor te zorgen dat alles tijdig klaar staat vragen we om je bestelling ongeveer een tweetal maanden op voorhand te plaatsen. Zo kunnen we ons ook op de vroeg vogels voorbereiden.
-	</p>
-	<p>
-		Voor kaartjes kan je al eens een kijkje nemen in de boeken in onze winkel of online bij onze partners. Let wel op niet alle kaartjes vind je online. Kijkje je toch liever thuis dan kan je de boeken telefonisch of per mail reserveren om rustig in eigen omgeving door te bladeren. www.buromac.be www.belarto.be www.kaartjesenco.be www.familycards.nl
-	</p>
+			<h4>In verwachting?</h4>
+			<p>	
+				Om er voor te zorgen dat alles tijdig klaar staat vragen we om je bestelling ongeveer een tweetal maanden op voorhand te plaatsen. Zo kunnen we ons ook op de vroeg vogels voorbereiden.
+			</p>
+			<p>
+				Voor kaartjes kan je al eens een kijkje nemen in de boeken in onze winkel of online bij onze partners. Let wel op niet alle kaartjes vind je online. Kijkje je toch liever thuis dan kan je de boeken telefonisch of per mail reserveren om rustig in eigen omgeving door te bladeren. www.buromac.be www.belarto.be www.kaartjesenco.be www.familycards.nl
+			</p>
 
-	<h4>Is jou kindje geboren?</h4>
-	<p>
-		Laat het ons dan zeker weten!<br><br>
+			<h4>Is jou kindje geboren?</h4>
+			<p>
+				Laat het ons dan zeker weten!<br><br>
 
-		Kan je ons tijdens de openingsuren op de hoogte brengen voor 15u dan mag je jou drukwerk en doopsuiker de dag zelf nog komen oppikken. Omdat de komst van je kleine spruit niet altijd even goed te plannen valt, drukken we ook op zon- en feestdagen. Buiten de openingsuren kan je de geboorte melden via sms 24/24 en telefoon tussen 8u en 18u op ons gsm nummer +32 (0) 495/85.20.46. Indien u voor 12u ons kan verwittigen kan u de dag zelf alles komen ophalen.
-	</p>
-	<p>Bel je na 12u dan kan je dag er op meteen bij ons terecht.<p>
+				Kan je ons tijdens de openingsuren op de hoogte brengen voor 15u dan mag je jou drukwerk en doopsuiker de dag zelf nog komen oppikken. Omdat de komst van je kleine spruit niet altijd even goed te plannen valt, drukken we ook op zon- en feestdagen. Buiten de openingsuren kan je de geboorte melden via sms 24/24 en telefoon tussen 8u en 18u op ons gsm nummer +32 (0) 495/85.20.46. Indien u voor 12u ons kan verwittigen kan u de dag zelf alles komen ophalen.
+			</p>
+			<p>Bel je na 12u dan kan je dag er op meteen bij ons terecht.</p>
 
-	<b>Let op!</b> 
-	Voor special drukwerk gelden andere levertermijnen. Hiervoor worden bij de bestelling duidelijke afspraken gemaakt.</small>
+			<p>
+				<i class="fa fa-exclamation-triangle"></i> <b>Let op!</b><br>
+				Voor special drukwerk gelden andere levertermijnen. Hiervoor worden bij de bestelling duidelijke afspraken gemaakt.</small>
+			</p>
 
-	<h2>Producten</h2>
-	<p>
-		Met veel trots bieden we een zeer uitgebreid gamma aan, voor ieders budget. Van trendy tot klassiek, retro of hip. Naast een aantal vaste spelers vind je bij ons steeds de nieuwste collecties. We bieden voor ieder wat wils: traditionele suikerbonen, maar ook chips, bedrukt snoep of zeep, mentos, bellenblazers, snoepjes, bier of jenever flesjes en nog veel meer. Heb je zelf een leuk idee, dan staan we ook altijd open voor nieuwe dingen.
+			<h2>Producten</h2>
+			<p>
+				Met veel trots bieden we een zeer uitgebreid gamma aan, voor ieders budget. Van trendy tot klassiek, retro of hip. Naast een aantal vaste spelers vind je bij ons steeds de nieuwste collecties. We bieden voor ieder wat wils: traditionele suikerbonen, maar ook chips, bedrukt snoep of zeep, mentos, bellenblazers, snoepjes, bier of jenever flesjes en nog veel meer. Heb je zelf een leuk idee, dan staan we ook altijd open voor nieuwe dingen.
 
-Bovendien hebben we ook een ruim aanbod aan geschenken voor peters, meters, oma’s en opa’s. Ook doopkaarsen en leuke hebbedingetjes die allemaal gepersonaliseerd kunnen worden me een foto of leuk tekstje.
+				Bovendien hebben we ook een ruim aanbod aan geschenken voor peters, meters, oma’s en opa’s. Ook doopkaarsen en leuke hebbedingetjes die allemaal gepersonaliseerd kunnen worden me een foto of leuk tekstje.
 
-Voor de lekkerbekken bieden we in onze winkel ook heerlijke Belgische pralines aan of onze traditionele snoep die je meteen terug brengen naar vroeger. We hebben ook een ruim aanbod suikervrije lekkernijen!
+				Voor de lekkerbekken bieden we in onze winkel ook heerlijke Belgische pralines aan of onze traditionele snoep die je meteen terug brengen naar vroeger. We hebben ook een ruim aanbod suikervrije lekkernijen!
 
-Vind je toch jou ding niet op onze web shop, heb je ergens anders iets leuk gezien of zie je door het bos de bomen even niet meer? Neem dan contact met ons op en dan zoeken wij samen met jou naar een oplossing of ontwerp helemaal op jou maat!
+				Vind je toch jou ding niet op onze web shop, heb je ergens anders iets leuk gezien of zie je door het bos de bomen even niet meer? Neem dan <b><a href="{% url 'visit-us' %}">contact</a></b> met ons op en dan zoeken wij samen met jou naar een oplossing of ontwerp helemaal op jou maat!
+			</p>
 
-	<h2>Presentaties</h2>
-	<p>
-		Bij ons heb je steeds de keuze om je doopsuiker of bedankjes zelf te vullen, of om ze te laten vullen. Zo kan je alle benodigdheden los bestellen om zelf aan de slag te gaan of juist om zorgeloos kant en klaar op te komen pikken.
-	</p>
-	<p>
-	Wij zorgen dan dat alles helemaal van A tot Z voorbereid is en mooi gepresenteerd is. Voor deze presentatie hebben we verschillende doopsuikermanden en kastjes die je bij ons kan huren. Ook de creatieveling die graag zelf aan de slag wil kan zo een presentatiestuk bij ons huren. Heb je zelf iets leuk staan, maar zie je het niet zitten om zelf de presentatie te doen, dan mag je dit gerust binnen brengen en dan zetten wij voor jou alles klaar.
-	</p>
-	<p>
-		Voor wat inspiratie kan je alvast <a href="{% url 'presentations' %}">hier</a> een kijkje nemen!
-	</p>
+			<h2>Presentaties</h2>
+			<p>
+				Bij ons heb je steeds de keuze om je doopsuiker of bedankjes zelf te vullen, of om ze te laten vullen. Zo kan je alle benodigdheden los bestellen om zelf aan de slag te gaan of juist om zorgeloos kant en klaar op te komen pikken.
+			</p>
+			<p>
+			Wij zorgen dan dat alles helemaal van A tot Z voorbereid is en mooi gepresenteerd is. Voor deze presentatie hebben we verschillende doopsuikermanden en kastjes die je bij ons kan huren. Ook de creatieveling die graag zelf aan de slag wil kan zo een presentatiestuk bij ons huren. Heb je zelf iets leuk staan, maar zie je het niet zitten om zelf de presentatie te doen, dan mag je dit gerust binnen brengen en dan zetten wij voor jou alles klaar.
+			</p>
+			<p>
+				Voor wat inspiratie kan je alvast <b><a href="{% url 'presentations' %}">hier</a></b> een kijkje nemen!
+			</p>
+		</div>
+	</div>
 
 </div>
 

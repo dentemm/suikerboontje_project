@@ -21,5 +21,8 @@ class ThumbnailImage(models.Model):
 
 	image = ImageField(upload_to='images/presentations/thumbnails/')
 
+	class Meta:
+		ordering = ['image', ]
+
 	def __str__(self):
 		return str(self.image)
